@@ -1,0 +1,10 @@
+packageName: Measurements.Api
+packageVersion: 0.1.0
+projectName: Measurements.Api
+pocoModels: true
+aspnetCoreVersion: "6.0"
+swashbuckleVersion: "6.4.0"
+isLibrary: true
+buildTarget: "library"
+useNewtonsoft: true
+useSeperateModelProject: false

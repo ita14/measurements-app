@@ -1,0 +1,343 @@
+openapi: "3.0.0"
+info:
+  version: 0.1.0
+  title: Measurements API
+  description: API to fetch ruuvi tag measurements data.
+  contact:
+    name: tbd
+    email: tbd@example.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: http://locahost:6001/
+    description: Local API
+tags:
+  - name: Measurements
+    description: Operations to fetch sensor measurement data
+  - name: Sensors
+    description: Operations to manager sensors
+
+paths:
+  /measurements:
+    get:
+      tags:
+        - Measurements
+      description: |
+        Return measurement data for selected time period.
+      operationId: getMeasurements
+      parameters:
+        - name: startTime
+          in: query
+          description: Start time as defined by RFC 3339, section 5.6, for example, 2022-06-21T17:32:28Z
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: endTime
+          in: query
+          description: End time as defined by RFC 3339, section 5.6, for example, 2022-06-22T17:32:28Z
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: source
+          in: query
+          description: Measurement source identifier i.e. "C6:4C:96:B3:20:7E"
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Maximum number of results to return
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 1000
+      responses:
+        "200":
+          description: Measurements response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MeasurementsDataResponse"
+        "400":
+          description: Bad Request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ValidationProblemDetails"
+        default:
+          description: Unexpected error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+    post:
+      tags:
+        - Measurements
+      description: |
+        Create multiple measurements.
+      operationId: createMeasurements
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Measurement"
+      responses:
+        "204":
+          description: OK
+        default:
+          description: Unexpected error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+
+  /sensors:
+    get:
+      tags:
+        - Sensors
+      description: |
+        Get sensors.
+      operationId: getSensors
+      responses:
+        "200":
+          description: Sensors response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Sensor"
+    post:
+      tags:
+        - Sensors
+      description: |
+        Creates sensor.
+      operationId: createSensor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Sensor"
+      responses:
+        "200":
+          description: Sensor response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sensor"
+        default:
+          description: Unexpected error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /sensors/{id}:
+    get:
+      tags:
+        - Sensors
+      description: |
+        Get sensor by id
+      operationId: getSensorById
+      parameters:
+        - name: id
+          description: Id of sensor to fecth
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Sensor response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sensor"
+        "404":
+          description: Sensor not found
+        default:
+          description: Unexpected error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+    delete:
+      tags:
+        - Sensors
+      description: |
+        Delete sensor
+      operationId: deleteSensor
+      parameters:
+        - name: id
+          description: Id of sensor to delete
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Sensor deleted
+        "404":
+          description: Sensor not found
+        default:
+          description: Unexpected error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+
+components:
+  schemas:
+    ########################################################################
+    # Measurements
+    ########################################################################
+    Measurement:
+      type: object
+      description: Measurement data from one source
+      properties:
+        time:
+          type: string
+          format: date-time
+          description: Measurement time as defined by RFC 3339, section 5.6, for example, 2017-07-21T17:32:28Z
+        source:
+          type: string
+          description: Source of measurement. With ruuvi tag this is MAC.
+        temperature:
+          type: number
+          format: double
+          description: Temperature in celsius.
+        pressure:
+          type: number
+          format: double
+          description: Pressure
+        humidity:
+          type: number
+          format: double
+          description: Humidity
+        battery:
+          type: number
+          format: double
+          description: Battery level. TBD what is the format.
+        acceleration:
+          $ref: "#/components/schemas/Acceleration"
+    Acceleration:
+      type: object
+      description: Acceleration
+      properties:
+        acceleration:
+          type: number
+          format: double
+        accelerationX:
+          type: number
+          format: double
+        accelerationY:
+          type: number
+          format: double
+        accelerationZ:
+          type: number
+          format: double
+
+    ########################################################################
+    # Sensors
+    ########################################################################
+    Sensor:
+      type: object
+      description: Sensor producing measurements data
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+
+    ########################################################################
+    # Data responses
+    ########################################################################
+    MeasurementsDataResponse:
+      type: object
+      description: Response object for measurements.
+      properties:
+        count:
+          $ref: "#/components/schemas/ItemCount"
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Measurement"
+      additionalProperties: false
+    ItemCount:
+      type: integer
+      description: Count of items returned.
+    ########################################################################
+    # Problem details based on rfc7807.
+    ########################################################################
+    ProblemDetails:
+      type: object
+      description: Problem details based on rfc7807.
+      properties:
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+        extensions:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties: false
+          nullable: true
+          readOnly: true
+      additionalProperties: false
+    ValidationProblemDetails:
+      type: object
+      description: Problem details for validation errors.
+      properties:
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          nullable: true
+          readOnly: true
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+        extensions:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties: false
+          nullable: true
+          readOnly: true
+      additionalProperties: false
