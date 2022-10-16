@@ -1,15 +1,29 @@
 version: "3.9"
 
 services:
-  collector:
-    container_name: ruuvi_data_collector
-    hostname: collector.local
-    build: ./src/measurements-collector/
+  api:
+    container_name: measurements-api
+    hostname: measurements-api.local
+    build: ./src/measurements-api/
     depends_on:
       - db
+    ports:
+      - "7001:80"
     networks:
       msn:
         ipv4_address: 172.24.0.2
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  # collector:
+  #   container_name: ruuvi_data_collector
+  #   hostname: collector.local
+  #   build: ./src/measurements-collector/
+  #   depends_on:
+  #     - db
+  #   networks:
+  #     msn:
+  #       ipv4_address: 172.24.0.2
 
   db:
     container_name: cosmosdb

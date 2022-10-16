@@ -21,15 +21,11 @@ namespace OpenApi.Measurements.Api
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.11.1.0 (NJsonSchema v10.4.3.0 (Newtonsoft.Json v12.0.0.0))")]
     public interface IMeasurementsController
     {
-        /// <param name="startTime">Start time as defined by RFC 3339, section 5.6, for example, 2022-06-21T17:32:28Z</param>
-        /// <param name="endTime">End time as defined by RFC 3339, section 5.6, for example, 2022-06-22T17:32:28Z</param>
-        /// <param name="source">Measurement source identifier i.e. "C6:4C:96:B3:20:7E"</param>
-        /// <param name="limit">Maximum number of results to return</param>
         /// <returns>Measurements response</returns>
-        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<System.Collections.Generic.ICollection<MeasurementsDataResponse>>> MeasurementsGetAsync(System.DateTime startTime, System.DateTime endTime, string source, int limit, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MeasurementsDataResponse>> MeasurementsAsync(MeasurementFilter filter, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
     
         /// <returns>OK</returns>
-        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> MeasurementsPostAsync(System.Collections.Generic.IEnumerable<Measurement> body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> BatchInsertAsync(System.Collections.Generic.IEnumerable<Measurement> body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
     
     }
     
@@ -44,22 +40,18 @@ namespace OpenApi.Measurements.Api
             _implementation = implementation;
         }
     
-        /// <param name="startTime">Start time as defined by RFC 3339, section 5.6, for example, 2022-06-21T17:32:28Z</param>
-        /// <param name="endTime">End time as defined by RFC 3339, section 5.6, for example, 2022-06-22T17:32:28Z</param>
-        /// <param name="source">Measurement source identifier i.e. "C6:4C:96:B3:20:7E"</param>
-        /// <param name="limit">Maximum number of results to return</param>
         /// <returns>Measurements response</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("measurements", Name = "getMeasurements")]
-        public System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<System.Collections.Generic.ICollection<MeasurementsDataResponse>>> MeasurementsGet([Microsoft.AspNetCore.Mvc.FromQuery] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] System.DateTime startTime, [Microsoft.AspNetCore.Mvc.FromQuery] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] System.DateTime endTime, [Microsoft.AspNetCore.Mvc.FromQuery] string source, [Microsoft.AspNetCore.Mvc.FromQuery] int? limit, System.Threading.CancellationToken cancellationToken)
+        public System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MeasurementsDataResponse>> Measurements([Microsoft.AspNetCore.Mvc.FromQuery] MeasurementFilter filter, System.Threading.CancellationToken cancellationToken)
         {
-            return _implementation.MeasurementsGetAsync(startTime, endTime, source, limit ?? 1000, cancellationToken);
+            return _implementation.MeasurementsAsync(filter, cancellationToken);
         }
     
         /// <returns>OK</returns>
-        [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("measurements", Name = "createMeasurements")]
-        public System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> MeasurementsPost([Microsoft.AspNetCore.Mvc.FromBody] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] System.Collections.Generic.IEnumerable<Measurement> body, System.Threading.CancellationToken cancellationToken)
+        [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("measurements/batch-insert", Name = "postMeasurements")]
+        public System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> BatchInsert([Microsoft.AspNetCore.Mvc.FromBody] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] System.Collections.Generic.IEnumerable<Measurement> body, System.Threading.CancellationToken cancellationToken)
         {
-            return _implementation.MeasurementsPostAsync(body, cancellationToken);
+            return _implementation.BatchInsertAsync(body, cancellationToken);
         }
     
     }
@@ -73,9 +65,13 @@ namespace OpenApi.Measurements.Api
         /// <returns>Sensor response</returns>
         System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Sensor>> SensorsPostAsync(Sensor body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
     
-        /// <param name="id">Id of sensor to fecth</param>
+        /// <param name="id">Id of sensor to fetch</param>
         /// <returns>Sensor response</returns>
         System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Sensor>> SensorsGetAsync(string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+    
+        /// <param name="id">Id of sensor to update</param>
+        /// <returns>Sensor updated</returns>
+        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Sensor>> SensorsPutAsync(Sensor body, string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
     
         /// <param name="id">Id of sensor to delete</param>
         /// <returns>Sensor deleted</returns>
@@ -102,18 +98,26 @@ namespace OpenApi.Measurements.Api
         }
     
         /// <returns>Sensor response</returns>
-        [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("sensors", Name = "createSensor")]
+        [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("sensors", Name = "postSensor")]
         public System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Sensor>> SensorsPost([Microsoft.AspNetCore.Mvc.FromBody] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] Sensor body, System.Threading.CancellationToken cancellationToken)
         {
             return _implementation.SensorsPostAsync(body, cancellationToken);
         }
     
-        /// <param name="id">Id of sensor to fecth</param>
+        /// <param name="id">Id of sensor to fetch</param>
         /// <returns>Sensor response</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("sensors/{id}", Name = "getSensorById")]
         public System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Sensor>> SensorsGet([Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string id, System.Threading.CancellationToken cancellationToken)
         {
             return _implementation.SensorsGetAsync(id, cancellationToken);
+        }
+    
+        /// <param name="id">Id of sensor to update</param>
+        /// <returns>Sensor updated</returns>
+        [Microsoft.AspNetCore.Mvc.HttpPut, Microsoft.AspNetCore.Mvc.Route("sensors/{id}", Name = "putSensor")]
+        public System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Sensor>> SensorsPut([Microsoft.AspNetCore.Mvc.FromBody] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] Sensor body, [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string id, System.Threading.CancellationToken cancellationToken)
+        {
+            return _implementation.SensorsPutAsync(body, id, cancellationToken);
         }
     
         /// <param name="id">Id of sensor to delete</param>
@@ -130,6 +134,10 @@ namespace OpenApi.Measurements.Api
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.4.3.0 (Newtonsoft.Json v12.0.0.0)")]
     public partial class Measurement 
     {
+        /// <summary>Measurement unique identifier. Generated on insert.</summary>
+        [System.Text.Json.Serialization.JsonPropertyName("id")]
+        public string Id { get; set; }
+    
         /// <summary>Measurement time as defined by RFC 3339, section 5.6, for example, 2017-07-21T17:32:28Z</summary>
         [System.Text.Json.Serialization.JsonPropertyName("time")]
         public System.DateTime Time { get; set; }
@@ -157,15 +165,6 @@ namespace OpenApi.Measurements.Api
         [System.Text.Json.Serialization.JsonPropertyName("acceleration")]
         public Acceleration Acceleration { get; set; }
     
-        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
-    
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties; }
-            set { _additionalProperties = value; }
-        }
-    
     
     }
     
@@ -185,15 +184,6 @@ namespace OpenApi.Measurements.Api
         [System.Text.Json.Serialization.JsonPropertyName("accelerationZ")]
         public double AccelerationZ { get; set; }
     
-        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
-    
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties; }
-            set { _additionalProperties = value; }
-        }
-    
     
     }
     
@@ -201,20 +191,17 @@ namespace OpenApi.Measurements.Api
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.4.3.0 (Newtonsoft.Json v12.0.0.0)")]
     public partial class Sensor 
     {
+        /// <summary>Sensor unique identifier. Generated on insert.</summary>
         [System.Text.Json.Serialization.JsonPropertyName("id")]
         public string Id { get; set; }
     
+        /// <summary>Sensor identifier. For ruuvi tags this is mac address. Must be unique.</summary>
+        [System.Text.Json.Serialization.JsonPropertyName("identifier")]
+        public string Identifier { get; set; }
+    
+        /// <summary>Sensor description.</summary>
         [System.Text.Json.Serialization.JsonPropertyName("description")]
         public string Description { get; set; }
-    
-        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
-    
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties; }
-            set { _additionalProperties = value; }
-        }
     
     
     }
@@ -223,8 +210,13 @@ namespace OpenApi.Measurements.Api
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.4.3.0 (Newtonsoft.Json v12.0.0.0)")]
     public partial class MeasurementsDataResponse 
     {
+        /// <summary>Count of items returned.</summary>
         [System.Text.Json.Serialization.JsonPropertyName("count")]
         public int Count { get; set; }
+    
+        /// <summary>Total number of items.</summary>
+        [System.Text.Json.Serialization.JsonPropertyName("total")]
+        public int Total { get; set; }
     
         [System.Text.Json.Serialization.JsonPropertyName("items")]
         public System.Collections.Generic.List<Measurement> Items { get; set; }
@@ -281,6 +273,39 @@ namespace OpenApi.Measurements.Api
     
         [System.Text.Json.Serialization.JsonPropertyName("extensions")]
         public System.Collections.Generic.IDictionary<string, object> Extensions { get; set; }
+    
+    
+    }
+    
+    /// <summary>Filters for measurement items.</summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.4.3.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class MeasurementFilter 
+    {
+        /// <summary>Start time as defined by RFC 3339, section 5.6.</summary>
+        [System.Text.Json.Serialization.JsonPropertyName("startTime")]
+        public System.DateTime? StartTime { get; set; }
+    
+        /// <summary>End time as defined by RFC 3339, section 5.6.</summary>
+        [System.Text.Json.Serialization.JsonPropertyName("endTime")]
+        public System.DateTime? EndTime { get; set; }
+    
+        /// <summary>Measurement source identifier.</summary>
+        [System.Text.Json.Serialization.JsonPropertyName("source")]
+        public string Source { get; set; }
+    
+        /// <summary>Order results by column. Format is column_name:sort_direction.</summary>
+        [System.Text.Json.Serialization.JsonPropertyName("orderBy")]
+        public string OrderBy { get; set; } = "time:asc";
+    
+        /// <summary>Maximum number of results to return</summary>
+        [System.Text.Json.Serialization.JsonPropertyName("limit")]
+        [System.ComponentModel.DataAnnotations.Range(0, 1000)]
+        public int Limit { get; set; } = 100;
+    
+        /// <summary>Starting offset</summary>
+        [System.Text.Json.Serialization.JsonPropertyName("offset")]
+        [System.ComponentModel.DataAnnotations.Range(0, int.MaxValue)]
+        public int Offset { get; set; } = 0;
     
     
     }

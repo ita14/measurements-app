@@ -10,59 +10,30 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
 servers:
-  - url: http://locahost:6001/
+  - url: http://localhost:7001
     description: Local API
 tags:
   - name: Measurements
     description: Operations to fetch sensor measurement data
   - name: Sensors
-    description: Operations to manager sensors
+    description: Operations to manage sensors
 
 paths:
   /measurements:
     get:
       tags:
         - Measurements
-      description: |
-        Return measurement data for selected time period.
+      description: Return measurement data for selected time period.
       operationId: getMeasurements
       parameters:
-        - name: startTime
-          in: query
-          description: Start time as defined by RFC 3339, section 5.6, for example, 2022-06-21T17:32:28Z
-          required: true
-          schema:
-            type: string
-            format: date-time
-        - name: endTime
-          in: query
-          description: End time as defined by RFC 3339, section 5.6, for example, 2022-06-22T17:32:28Z
-          required: true
-          schema:
-            type: string
-            format: date-time
-        - name: source
-          in: query
-          description: Measurement source identifier i.e. "C6:4C:96:B3:20:7E"
-          schema:
-            type: string
-        - name: limit
-          in: query
-          description: Maximum number of results to return
-          required: false
-          schema:
-            type: integer
-            format: int32
-            default: 1000
+        - $ref: "#/components/parameters/measurementFilterParam"
       responses:
         "200":
           description: Measurements response
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/MeasurementsDataResponse"
+                $ref: "#/components/schemas/MeasurementsDataResponse"
         "400":
           description: Bad Request
           content:
@@ -75,12 +46,13 @@ paths:
             "application/json":
               schema:
                 $ref: "#/components/schemas/ProblemDetails"
+
+  /measurements/batch-insert:
     post:
       tags:
         - Measurements
-      description: |
-        Create multiple measurements.
-      operationId: createMeasurements
+      description: Create multiple measurements.
+      operationId: postMeasurements
       requestBody:
         required: true
         content:
@@ -103,8 +75,7 @@ paths:
     get:
       tags:
         - Sensors
-      description: |
-        Get sensors.
+      description: Get sensors.
       operationId: getSensors
       responses:
         "200":
@@ -118,9 +89,8 @@ paths:
     post:
       tags:
         - Sensors
-      description: |
-        Creates sensor.
-      operationId: createSensor
+      description: Create sensor.
+      operationId: postSensor
       requestBody:
         required: true
         content:
@@ -144,12 +114,11 @@ paths:
     get:
       tags:
         - Sensors
-      description: |
-        Get sensor by id
+      description: Get sensor by id
       operationId: getSensorById
       parameters:
         - name: id
-          description: Id of sensor to fecth
+          description: Id of sensor to fetch
           in: path
           required: true
           schema:
@@ -169,11 +138,44 @@ paths:
             "application/json":
               schema:
                 $ref: "#/components/schemas/ProblemDetails"
+    put:
+      tags:
+        - Sensors
+      description: Update sensor
+      operationId: putSensor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Sensor"
+      parameters:
+        - name: id
+          description: Id of sensor to update
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "204":
+          description: Sensor updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sensor"
+        "404":
+          description: Sensor not found
+        default:
+          description: Unexpected error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
     delete:
       tags:
         - Sensors
-      description: |
-        Delete sensor
+      description: Delete sensor
       operationId: deleteSensor
       parameters:
         - name: id
@@ -202,7 +204,11 @@ components:
     Measurement:
       type: object
       description: Measurement data from one source
+      additionalProperties: false
       properties:
+        id:
+          type: string
+          description: Measurement unique identifier. Generated on insert.
         time:
           type: string
           format: date-time
@@ -228,9 +234,11 @@ components:
           description: Battery level. TBD what is the format.
         acceleration:
           $ref: "#/components/schemas/Acceleration"
+
     Acceleration:
       type: object
       description: Acceleration
+      additionalProperties: false
       properties:
         acceleration:
           type: number
@@ -251,11 +259,17 @@ components:
     Sensor:
       type: object
       description: Sensor producing measurements data
+      additionalProperties: false
       properties:
         id:
           type: string
+          description: Sensor unique identifier. Generated on insert.
+        identifier:
+          type: string
+          description: Sensor identifier. For ruuvi tags this is mac address. Must be unique.
         description:
           type: string
+          description: Sensor description.
 
     ########################################################################
     # Data responses
@@ -263,23 +277,26 @@ components:
     MeasurementsDataResponse:
       type: object
       description: Response object for measurements.
+      additionalProperties: false
       properties:
         count:
-          $ref: "#/components/schemas/ItemCount"
+          type: integer
+          description: Count of items returned.
+        total:
+          type: integer
+          description: Total number of items.
         items:
           type: array
           items:
             $ref: "#/components/schemas/Measurement"
-      additionalProperties: false
-    ItemCount:
-      type: integer
-      description: Count of items returned.
+
     ########################################################################
     # Problem details based on rfc7807.
     ########################################################################
     ProblemDetails:
       type: object
       description: Problem details based on rfc7807.
+      additionalProperties: false
       properties:
         type:
           type: string
@@ -304,10 +321,10 @@ components:
             additionalProperties: false
           nullable: true
           readOnly: true
-      additionalProperties: false
     ValidationProblemDetails:
       type: object
       description: Problem details for validation errors.
+      additionalProperties: false
       properties:
         errors:
           type: object
@@ -340,4 +357,53 @@ components:
             additionalProperties: false
           nullable: true
           readOnly: true
+
+    ########################################################################
+    # Measurement Filter
+    ########################################################################
+    MeasurementFilter:
+      type: object
+      description: Filters for measurement items.
       additionalProperties: false
+      properties:
+        startTime:
+          description: Start time as defined by RFC 3339, section 5.6.
+          type: string
+          format: date-time
+          nullable: true
+          example: "2022-06-21T17:32:28Z"
+        endTime:
+          description: End time as defined by RFC 3339, section 5.6.
+          type: string
+          format: date-time
+          nullable: true
+          example: "2022-06-22T17:32:28Z"
+        source:
+          description: Measurement source identifier.
+          type: string
+          nullable: true
+          example: "C6:4C:96:B3:20:7E"
+        orderBy:
+          description:
+            Order results by column. Format is column_name:sort_direction.
+          type: string
+          default: "time:asc"
+          example: "time:asc"
+        limit:
+          description: Maximum number of results to return
+          type: integer
+          minimum: 0
+          maximum: 1000
+          default: 100
+        offset:
+          description: Starting offset
+          type: integer
+          minimum: 0
+          default: 0
+
+  parameters:
+    measurementFilterParam:
+      name: filter
+      in: query
+      schema:
+        $ref: "#/components/schemas/MeasurementFilter"
