@@ -20,7 +20,7 @@ generate() {
 }
 
 # Generate clients using openapitools
-generators=('aspnetcore' 'python')
+generators=('typescript' 'python')
 
 for gen in "${generators[@]}"; do
   generate $gen
@@ -28,3 +28,4 @@ done
 
 cp generated/api/Measurements.Api.generated.cs ../measurements-api/Measurements.Api/Controllers
 cp measurements-api.yaml ../measurements-api/Measurements.Api/wwwroot/openapi
+cp -R generated/python/. ../measurements-collector/measurements-api-client

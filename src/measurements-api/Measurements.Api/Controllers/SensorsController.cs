@@ -30,6 +30,7 @@ public class SensorsController : ControllerBase, ISensorsController
     public async Task<ActionResult<Sensor>> SensorsPostAsync(Sensor body, CancellationToken cancellationToken = default)
     {
         var command = _mapper.Map<CreateSensorCommand>(body);
+
         return await _mediator.Send(command, cancellationToken);
     }
 

@@ -17,14 +17,11 @@ public class DeleteSensorCommand : IRequest
 public class DeleteSensorCommandHandler : AsyncRequestHandler<DeleteSensorCommand>
 {
     private readonly ILogger<DeleteSensorCommandHandler> _logger;
-    private readonly IMediator _mediator;
     private readonly ISensorRepository _repo;
 
-    public DeleteSensorCommandHandler(ILogger<DeleteSensorCommandHandler> logger, IMediator mediator,
-        ISensorRepository repo)
+    public DeleteSensorCommandHandler(ILogger<DeleteSensorCommandHandler> logger, ISensorRepository repo)
     {
         _logger = logger;
-        _mediator = mediator;
         _repo = repo;
     }
 
@@ -32,13 +29,13 @@ public class DeleteSensorCommandHandler : AsyncRequestHandler<DeleteSensorComman
     {
         _logger.LogInformation("Handling DeleteSensorCommand...");
 
-        var existing = await _repo.GetItemAsync(request.Id);
+        var existing = await _repo.GetItemAsync(request.Id, cancellationToken);
 
         if (existing == null)
         {
             throw new EntityNotFoundException($"Sensor {request.Id} not found");
         }
 
-        await _repo.DeleteItemAsync(request.Id);
+        await _repo.DeleteItemAsync(request.Id, cancellationToken);
     }
 }

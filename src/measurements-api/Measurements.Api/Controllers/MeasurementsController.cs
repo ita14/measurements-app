@@ -1,21 +1,19 @@
 ﻿using AutoMapper;
+using Measurements.Api.Application.Measurements.Commands;
 using Measurements.Api.Application.Measurements.Queries;
-using Measurements.Api.Domain.Interfaces.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using OpenApi.Measurements.Api;
 
 namespace Measurements.Api.Controllers;
 
-public class MeasurementsController : IMeasurementsController
+public class MeasurementsController : ControllerBase, IMeasurementsController
 {
-    private readonly IMeasurementRepository _repo;
     private readonly IMapper _mapper;
     private readonly IMediator _mediator;
 
-    public MeasurementsController(IMeasurementRepository repo, IMapper mapper, IMediator mediator)
+    public MeasurementsController(IMapper mapper, IMediator mediator)
     {
-        _repo = repo;
         _mapper = mapper;
         _mediator = mediator;
     }
@@ -27,8 +25,11 @@ public class MeasurementsController : IMeasurementsController
         return await _mediator.Send(query, cancellationToken);
     }
 
-    public Task<IActionResult> BatchInsertAsync(IEnumerable<Measurement> body, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> BatchInsertAsync(IEnumerable<Measurement> body, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var command = new InsertMeasurementsCommand(body);
+        await _mediator.Send(command, cancellationToken);
+
+        return NoContent();
     }
 }

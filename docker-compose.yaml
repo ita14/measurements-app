@@ -15,15 +15,15 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
 
-  # collector:
-  #   container_name: ruuvi_data_collector
-  #   hostname: collector.local
-  #   build: ./src/measurements-collector/
-  #   depends_on:
-  #     - db
-  #   networks:
-  #     msn:
-  #       ipv4_address: 172.24.0.2
+  collector:
+    container_name: ruuvi_data_collector
+    hostname: collector.local
+    build: ./src/measurements-collector/
+    depends_on:
+      - db
+    networks:
+      msn:
+        ipv4_address: 172.24.0.3
 
   db:
     container_name: cosmosdb

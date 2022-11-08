@@ -31,19 +31,19 @@ paths:
         "200":
           description: Measurements response
           content:
-            application/json:
+            "application/json; charset=utf-8":
               schema:
                 $ref: "#/components/schemas/MeasurementsDataResponse"
         "400":
           description: Bad Request
           content:
-            "application/json":
+            "application/json; charset=utf-8":
               schema:
                 $ref: "#/components/schemas/ValidationProblemDetails"
         default:
           description: Unexpected error
           content:
-            "application/json":
+            "application/json; charset=utf-8":
               schema:
                 $ref: "#/components/schemas/ProblemDetails"
 
@@ -67,7 +67,7 @@ paths:
         default:
           description: Unexpected error
           content:
-            "application/json":
+            "application/json; charset=utf-8":
               schema:
                 $ref: "#/components/schemas/ProblemDetails"
 
@@ -107,7 +107,7 @@ paths:
         default:
           description: Unexpected error
           content:
-            "application/json":
+            "application/json; charset=utf-8":
               schema:
                 $ref: "#/components/schemas/ProblemDetails"
   /sensors/{id}:
@@ -135,7 +135,7 @@ paths:
         default:
           description: Unexpected error
           content:
-            "application/json":
+            "application/json; charset=utf-8":
               schema:
                 $ref: "#/components/schemas/ProblemDetails"
     put:
@@ -169,7 +169,7 @@ paths:
         default:
           description: Unexpected error
           content:
-            "application/json":
+            "application/json; charset=utf-8":
               schema:
                 $ref: "#/components/schemas/ProblemDetails"
     delete:
@@ -192,7 +192,7 @@ paths:
         default:
           description: Unexpected error
           content:
-            "application/json":
+            "application/json; charset=utf-8":
               schema:
                 $ref: "#/components/schemas/ProblemDetails"
 
