@@ -21,8 +21,14 @@ namespace OpenApi.Measurements.Api
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.11.1.0 (NJsonSchema v10.4.3.0 (Newtonsoft.Json v12.0.0.0))")]
     public interface IMeasurementsController
     {
+        /// <param name="startTime">Start time as defined by RFC 3339, section 5.6.</param>
+        /// <param name="endTime">End time as defined by RFC 3339, section 5.6.</param>
+        /// <param name="source">Measurement source identifier.</param>
+        /// <param name="orderBy">Order results by column. Format is column_name:sort_direction.</param>
+        /// <param name="limit">Maximum number of results to return</param>
+        /// <param name="offset">Starting offset</param>
         /// <returns>Measurements response</returns>
-        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MeasurementsDataResponse>> MeasurementsAsync(MeasurementFilter filter, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MeasurementsDataResponse>> MeasurementsAsync(System.DateTime? startTime, System.DateTime? endTime, string source, string orderBy, int limit, int offset, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
     
         /// <returns>OK</returns>
         System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> BatchInsertAsync(System.Collections.Generic.IEnumerable<Measurement> body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
@@ -40,11 +46,17 @@ namespace OpenApi.Measurements.Api
             _implementation = implementation;
         }
     
+        /// <param name="startTime">Start time as defined by RFC 3339, section 5.6.</param>
+        /// <param name="endTime">End time as defined by RFC 3339, section 5.6.</param>
+        /// <param name="source">Measurement source identifier.</param>
+        /// <param name="orderBy">Order results by column. Format is column_name:sort_direction.</param>
+        /// <param name="limit">Maximum number of results to return</param>
+        /// <param name="offset">Starting offset</param>
         /// <returns>Measurements response</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("measurements", Name = "getMeasurements")]
-        public System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MeasurementsDataResponse>> Measurements([Microsoft.AspNetCore.Mvc.FromQuery] MeasurementFilter filter, System.Threading.CancellationToken cancellationToken)
+        public System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MeasurementsDataResponse>> Measurements([Microsoft.AspNetCore.Mvc.FromQuery] System.DateTime? startTime, [Microsoft.AspNetCore.Mvc.FromQuery] System.DateTime? endTime, [Microsoft.AspNetCore.Mvc.FromQuery] string source, [Microsoft.AspNetCore.Mvc.FromQuery] string orderBy, [Microsoft.AspNetCore.Mvc.FromQuery] int? limit, [Microsoft.AspNetCore.Mvc.FromQuery] int? offset, System.Threading.CancellationToken cancellationToken)
         {
-            return _implementation.MeasurementsAsync(filter, cancellationToken);
+            return _implementation.MeasurementsAsync(startTime, endTime, source, orderBy ?? "time:asc", limit ?? 100, offset ?? 0, cancellationToken);
         }
     
         /// <returns>OK</returns>
@@ -71,7 +83,7 @@ namespace OpenApi.Measurements.Api
     
         /// <param name="id">Id of sensor to update</param>
         /// <returns>Sensor updated</returns>
-        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Sensor>> SensorsPutAsync(Sensor body, string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> SensorsPutAsync(Sensor body, string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
     
         /// <param name="id">Id of sensor to delete</param>
         /// <returns>Sensor deleted</returns>
@@ -115,7 +127,7 @@ namespace OpenApi.Measurements.Api
         /// <param name="id">Id of sensor to update</param>
         /// <returns>Sensor updated</returns>
         [Microsoft.AspNetCore.Mvc.HttpPut, Microsoft.AspNetCore.Mvc.Route("sensors/{id}", Name = "putSensor")]
-        public System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Sensor>> SensorsPut([Microsoft.AspNetCore.Mvc.FromBody] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] Sensor body, [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string id, System.Threading.CancellationToken cancellationToken)
+        public System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> SensorsPut([Microsoft.AspNetCore.Mvc.FromBody] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] Sensor body, [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string id, System.Threading.CancellationToken cancellationToken)
         {
             return _implementation.SensorsPutAsync(body, id, cancellationToken);
         }
@@ -273,39 +285,6 @@ namespace OpenApi.Measurements.Api
     
         [System.Text.Json.Serialization.JsonPropertyName("extensions")]
         public System.Collections.Generic.IDictionary<string, object> Extensions { get; set; }
-    
-    
-    }
-    
-    /// <summary>Filters for measurement items.</summary>
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.4.3.0 (Newtonsoft.Json v12.0.0.0)")]
-    public partial class MeasurementFilter 
-    {
-        /// <summary>Start time as defined by RFC 3339, section 5.6.</summary>
-        [System.Text.Json.Serialization.JsonPropertyName("startTime")]
-        public System.DateTime? StartTime { get; set; }
-    
-        /// <summary>End time as defined by RFC 3339, section 5.6.</summary>
-        [System.Text.Json.Serialization.JsonPropertyName("endTime")]
-        public System.DateTime? EndTime { get; set; }
-    
-        /// <summary>Measurement source identifier.</summary>
-        [System.Text.Json.Serialization.JsonPropertyName("source")]
-        public string Source { get; set; }
-    
-        /// <summary>Order results by column. Format is column_name:sort_direction.</summary>
-        [System.Text.Json.Serialization.JsonPropertyName("orderBy")]
-        public string OrderBy { get; set; } = "time:asc";
-    
-        /// <summary>Maximum number of results to return</summary>
-        [System.Text.Json.Serialization.JsonPropertyName("limit")]
-        [System.ComponentModel.DataAnnotations.Range(0, 1000)]
-        public int Limit { get; set; } = 100;
-    
-        /// <summary>Starting offset</summary>
-        [System.Text.Json.Serialization.JsonPropertyName("offset")]
-        [System.ComponentModel.DataAnnotations.Range(0, int.MaxValue)]
-        public int Offset { get; set; } = 0;
     
     
     }

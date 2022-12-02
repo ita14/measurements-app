@@ -12,10 +12,10 @@ Stop
 docker compose down
 ```
 
-Clean
+Stop and remove volumes
 
 ```
-docker compose rm
+docker compose down -v --remove-orphans
 ```
 
 # Cosmos DB

@@ -46,7 +46,7 @@ public class SensorsController : ControllerBase, ISensorsController
         return NotFound();
     }
 
-    public async Task<ActionResult<Sensor>> SensorsPutAsync(Sensor body, string id, CancellationToken cancellationToken = default(CancellationToken))
+    public async Task<IActionResult> SensorsPutAsync(Sensor body, string id, CancellationToken cancellationToken = default(CancellationToken))
     {
         var command = _mapper.Map<UpdateSensorCommand>(body);
         await _mediator.Send(command, cancellationToken);

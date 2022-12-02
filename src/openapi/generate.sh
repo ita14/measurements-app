@@ -20,12 +20,14 @@ generate() {
 }
 
 # Generate clients using openapitools
-generators=('typescript' 'python')
+generators=('typescript-fetch' 'python')
 
 for gen in "${generators[@]}"; do
   generate $gen
 done
 
 cp generated/api/Measurements.Api.generated.cs ../measurements-api/Measurements.Api/Controllers
+cp -R generated/python/.                       ../measurements-collector/measurements-api-client
+cp -R generated/typescript-fetch/.             ../measurements-app/src/generated/measurements-api-client
+
 cp measurements-api.yaml ../measurements-api/Measurements.Api/wwwroot/openapi
-cp -R generated/python/. ../measurements-collector/measurements-api-client

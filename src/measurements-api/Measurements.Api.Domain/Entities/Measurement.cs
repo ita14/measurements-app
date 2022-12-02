@@ -1,5 +1,7 @@
 ﻿namespace Measurements.Api.Domain.Entities;
 
+#nullable disable
+
 public class Measurement : BaseEntity
 {
     public System.DateTime Time { get; set; }

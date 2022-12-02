@@ -18,9 +18,18 @@ public class MeasurementsController : ControllerBase, IMeasurementsController
         _mediator = mediator;
     }
 
-    public async Task<ActionResult<MeasurementsDataResponse>> MeasurementsAsync(MeasurementFilter filter, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<MeasurementsDataResponse>> MeasurementsAsync(DateTime? startTime, DateTime? endTime, string source, string orderBy, int limit, int offset,
+        CancellationToken cancellationToken = default(CancellationToken))
     {
-        var query = _mapper.Map<SearchMeasurementsQuery>(filter);
+        var query = new SearchMeasurementsQuery
+        {
+            StartTime = startTime,
+            EndTime = endTime,
+            Source = source,
+            OrderBy = orderBy,
+            Limit = limit,
+            Offset = offset
+        };
 
         return await _mediator.Send(query, cancellationToken);
     }

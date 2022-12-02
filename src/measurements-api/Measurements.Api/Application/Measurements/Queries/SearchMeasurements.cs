@@ -7,12 +7,21 @@ using OpenApi.Measurements.Api;
 
 namespace Measurements.Api.Application.Measurements.Queries;
 
-public class SearchMeasurementsQuery : MeasurementFilter, IRequest<MeasurementsDataResponse>
+public class SearchMeasurementsQuery: IRequest<MeasurementsDataResponse>
 {
+    #nullable disable
+
+    public DateTime? StartTime { get; set; }
+    public DateTime? EndTime { get; set; }
+    public string Source { get; set; }
+    public string OrderBy { get; set; }
+    public int Limit { get; set; }
+    public int Offset { get; set; }
+
     /// <summary>
     /// Get parsed sort condition.
     /// </summary>
-    public SortCondition<Domain.Entities.Measurement>? SortCondition =>
+    public SortCondition<Domain.Entities.Measurement> SortCondition =>
         SortCondition<Domain.Entities.Measurement>.TryParse(OrderBy, out var condition)
             ? condition
             : null;

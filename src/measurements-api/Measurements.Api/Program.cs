@@ -45,6 +45,7 @@ try
     });
     app.UseAuthorization();
     app.MapControllers();
+    app.UseCors(opt => opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
     app.UseProblemDetails();
     app.UseSwaggerUI(options =>
     {

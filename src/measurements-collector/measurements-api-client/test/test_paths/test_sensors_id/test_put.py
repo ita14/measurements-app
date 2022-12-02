@@ -32,8 +32,7 @@ class TestSensorsId(ApiTestMixin, unittest.TestCase):
         pass
 
     response_status = 204
-
-
+    response_body = ''
 
 
 

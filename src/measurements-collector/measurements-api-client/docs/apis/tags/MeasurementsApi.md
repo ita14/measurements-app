@@ -22,7 +22,6 @@ Return measurement data for selected time period.
 import measurements_api_client
 from measurements_api_client.apis.tags import measurements_api
 from measurements_api_client.model.validation_problem_details import ValidationProblemDetails
-from measurements_api_client.model.measurement_filter import MeasurementFilter
 from measurements_api_client.model.problem_details import ProblemDetails
 from measurements_api_client.model.measurements_data_response import MeasurementsDataResponse
 from pprint import pprint
@@ -39,14 +38,12 @@ with measurements_api_client.ApiClient(configuration) as api_client:
 
     # example passing only optional values
     query_params = {
-        'filter': MeasurementFilter(
-        start_time="2022-06-21T17:32:28Z",
-        end_time="2022-06-22T17:32:28Z",
-        source="C6:4C:96:B3:20:7E",
-        order_by="time:asc",
-        limit=100,
-        offset=0,
-    ),
+        'startTime': "2022-06-21T17:32:28Z",
+        'endTime': "2022-06-22T17:32:28Z",
+        'source': "C6:4C:96:B3:20:7E",
+        'orderBy': "time:asc",
+        'limit': 100,
+        'offset': 0,
     }
     try:
         api_response = api_instance.get_measurements(
@@ -71,14 +68,55 @@ skip_deserialization | bool | default is False | when True, headers and body wil
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
-filter | FilterSchema | | optional
+startTime | StartTimeSchema | | optional
+endTime | EndTimeSchema | | optional
+source | SourceSchema | | optional
+orderBy | OrderBySchema | | optional
+limit | LimitSchema | | optional
+offset | OffsetSchema | | optional
 
 
-# FilterSchema
-Type | Description  | Notes
-------------- | ------------- | -------------
-[**MeasurementFilter**](../../models/MeasurementFilter.md) |  | 
+# StartTimeSchema
 
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+None, str, datetime,  | NoneClass, str,  |  | value must conform to RFC-3339 date-time
+
+# EndTimeSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+None, str, datetime,  | NoneClass, str,  |  | value must conform to RFC-3339 date-time
+
+# SourceSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+None, str,  | NoneClass, str,  |  | 
+
+# OrderBySchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | if omitted the server will use the default value of "time:asc"
+
+# LimitSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+decimal.Decimal, int,  | decimal.Decimal,  |  | if omitted the server will use the default value of 100
+
+# OffsetSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+decimal.Decimal, int,  | decimal.Decimal,  |  | if omitted the server will use the default value of 0
 
 ### Return Types, Responses
 

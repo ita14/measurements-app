@@ -27,12 +27,7 @@ public class CreateSensorCommandHandler : IRequestHandler<CreateSensorCommand, S
     {
         _logger.LogInformation("Handling CreateSensorCommand...");
 
-        var existing = await _repo.GetItemAsync(request.Id, ct);
-
-        if (existing is not null)
-        {
-            throw new ValidationException("Sensor already exists.");
-        }
+        // TODO: Change the sensor identifier to id or validate identifier duplicates
 
         var item = _mapper.Map<Domain.Entities.Sensor>(request);
 

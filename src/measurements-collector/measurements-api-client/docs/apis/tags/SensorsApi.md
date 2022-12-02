@@ -395,7 +395,7 @@ No authorization required
 
 # **put_sensor**
 <a name="put_sensor"></a>
-> Sensor put_sensor(idsensor)
+> put_sensor(idsensor)
 
 
 
@@ -434,7 +434,6 @@ with measurements_api_client.ApiClient(configuration) as api_client:
             path_params=path_params,
             body=body,
         )
-        pprint(api_response)
     except measurements_api_client.ApiException as e:
         print("Exception when calling SensorsApi->put_sensor: %s\n" % e)
 ```
@@ -445,7 +444,7 @@ Name | Type | Description  | Notes
 body | typing.Union[SchemaForRequestBodyApplicationJson] | required |
 path_params | RequestPathParams | |
 content_type | str | optional, default is 'application/json' | Selects the schema and serialization of the request body
-accept_content_types | typing.Tuple[str] | default is ('application/json', 'application/json; charset&#x3D;utf-8', ) | Tells the server the content type(s) that are accepted by the client
+accept_content_types | typing.Tuple[str] | default is ('application/json; charset&#x3D;utf-8', ) | Tells the server the content type(s) that are accepted by the client
 stream | bool | default is False | if True then the response.content will be streamed and loaded from a file like object. When downloading a file, set this to True to force the code to deserialize the content to a FileSchema file
 timeout | typing.Optional[typing.Union[int, typing.Tuple]] | default is None | the timeout used by the rest client
 skip_deserialization | bool | default is False | when True, headers and body will be unset and an instance of api_client.ApiResponseWithoutDeserialization will be returned
@@ -485,14 +484,8 @@ default | [ApiResponseForDefault](#put_sensor.ApiResponseForDefault) | Unexpecte
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 response | urllib3.HTTPResponse | Raw response |
-body | typing.Union[SchemaFor204ResponseBodyApplicationJson, ] |  |
+body | Unset | body was not defined |
 headers | Unset | headers were not defined |
-
-# SchemaFor204ResponseBodyApplicationJson
-Type | Description  | Notes
-------------- | ------------- | -------------
-[**Sensor**](../../models/Sensor.md) |  | 
-
 
 #### put_sensor.ApiResponseFor404
 Name | Type | Description  | Notes

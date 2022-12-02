@@ -13,7 +13,6 @@
 
 from measurements_api_client.model.acceleration import Acceleration
 from measurements_api_client.model.measurement import Measurement
-from measurements_api_client.model.measurement_filter import MeasurementFilter
 from measurements_api_client.model.measurements_data_response import MeasurementsDataResponse
 from measurements_api_client.model.problem_details import ProblemDetails
 from measurements_api_client.model.sensor import Sensor

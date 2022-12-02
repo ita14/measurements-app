@@ -26,12 +26,93 @@ import frozendict  # noqa: F401
 from measurements_api_client import schemas  # noqa: F401
 
 from measurements_api_client.model.validation_problem_details import ValidationProblemDetails
-from measurements_api_client.model.measurement_filter import MeasurementFilter
 from measurements_api_client.model.problem_details import ProblemDetails
 from measurements_api_client.model.measurements_data_response import MeasurementsDataResponse
 
 # Query params
-FilterSchema = MeasurementFilter
+
+
+class StartTimeSchema(
+    schemas.DateTimeBase,
+    schemas.StrBase,
+    schemas.NoneBase,
+    schemas.Schema,
+    schemas.NoneStrMixin
+):
+
+
+    class MetaOapg:
+        format = 'date-time'
+
+
+    def __new__(
+        cls,
+        *args: typing.Union[None, str, datetime, ],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+    ) -> 'StartTimeSchema':
+        return super().__new__(
+            cls,
+            *args,
+            _configuration=_configuration,
+        )
+
+
+class EndTimeSchema(
+    schemas.DateTimeBase,
+    schemas.StrBase,
+    schemas.NoneBase,
+    schemas.Schema,
+    schemas.NoneStrMixin
+):
+
+
+    class MetaOapg:
+        format = 'date-time'
+
+
+    def __new__(
+        cls,
+        *args: typing.Union[None, str, datetime, ],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+    ) -> 'EndTimeSchema':
+        return super().__new__(
+            cls,
+            *args,
+            _configuration=_configuration,
+        )
+
+
+class SourceSchema(
+    schemas.StrBase,
+    schemas.NoneBase,
+    schemas.Schema,
+    schemas.NoneStrMixin
+):
+
+
+    def __new__(
+        cls,
+        *args: typing.Union[None, str, ],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+    ) -> 'SourceSchema':
+        return super().__new__(
+            cls,
+            *args,
+            _configuration=_configuration,
+        )
+OrderBySchema = schemas.StrSchema
+
+
+class LimitSchema(
+    schemas.IntSchema
+):
+    pass
+
+
+class OffsetSchema(
+    schemas.IntSchema
+):
+    pass
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams',
     {
@@ -40,7 +121,12 @@ RequestRequiredQueryParams = typing_extensions.TypedDict(
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams',
     {
-        'filter': typing.Union[FilterSchema, ],
+        'startTime': typing.Union[StartTimeSchema, None, str, datetime, ],
+        'endTime': typing.Union[EndTimeSchema, None, str, datetime, ],
+        'source': typing.Union[SourceSchema, None, str, ],
+        'orderBy': typing.Union[OrderBySchema, str, ],
+        'limit': typing.Union[LimitSchema, decimal.Decimal, int, ],
+        'offset': typing.Union[OffsetSchema, decimal.Decimal, int, ],
     },
     total=False
 )
@@ -50,10 +136,40 @@ class RequestQueryParams(RequestRequiredQueryParams, RequestOptionalQueryParams)
     pass
 
 
-request_query_filter = api_client.QueryParameter(
-    name="filter",
+request_query_start_time = api_client.QueryParameter(
+    name="startTime",
     style=api_client.ParameterStyle.FORM,
-    schema=FilterSchema,
+    schema=StartTimeSchema,
+    explode=True,
+)
+request_query_end_time = api_client.QueryParameter(
+    name="endTime",
+    style=api_client.ParameterStyle.FORM,
+    schema=EndTimeSchema,
+    explode=True,
+)
+request_query_source = api_client.QueryParameter(
+    name="source",
+    style=api_client.ParameterStyle.FORM,
+    schema=SourceSchema,
+    explode=True,
+)
+request_query_order_by = api_client.QueryParameter(
+    name="orderBy",
+    style=api_client.ParameterStyle.FORM,
+    schema=OrderBySchema,
+    explode=True,
+)
+request_query_limit = api_client.QueryParameter(
+    name="limit",
+    style=api_client.ParameterStyle.FORM,
+    schema=LimitSchema,
+    explode=True,
+)
+request_query_offset = api_client.QueryParameter(
+    name="offset",
+    style=api_client.ParameterStyle.FORM,
+    schema=OffsetSchema,
     explode=True,
 )
 SchemaFor200ResponseBodyApplicationJsonCharsetutf8 = MeasurementsDataResponse
@@ -173,7 +289,12 @@ class BaseApi(api_client.Api):
 
         prefix_separator_iterator = None
         for parameter in (
-            request_query_filter,
+            request_query_start_time,
+            request_query_end_time,
+            request_query_source,
+            request_query_order_by,
+            request_query_limit,
+            request_query_offset,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:

@@ -142,7 +142,6 @@ import measurements_api_client
 from pprint import pprint
 from measurements_api_client.apis.tags import measurements_api
 from measurements_api_client.model.measurement import Measurement
-from measurements_api_client.model.measurement_filter import MeasurementFilter
 from measurements_api_client.model.measurements_data_response import MeasurementsDataResponse
 from measurements_api_client.model.problem_details import ProblemDetails
 from measurements_api_client.model.validation_problem_details import ValidationProblemDetails
@@ -157,17 +156,65 @@ configuration = measurements_api_client.Configuration(
 with measurements_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = measurements_api.MeasurementsApi(api_client)
-    filter = MeasurementFilter(
-        start_time="2022-06-21T17:32:28Z",
-        end_time="2022-06-22T17:32:28Z",
-        source="C6:4C:96:B3:20:7E",
-        order_by="time:asc",
-        limit=100,
-        offset=0,
-    ) # MeasurementFilter |  (optional)
+    start_time = "2022-06-21T17:32:28Z" # datetime, none_type | Start time as defined by RFC 3339, section 5.6. (optional)
+end_time = "2022-06-22T17:32:28Z" # datetime, none_type | End time as defined by RFC 3339, section 5.6. (optional)
+source = "C6:4C:96:B3:20:7E" # str, none_type | Measurement source identifier. (optional)
+order_by = "time:asc" # str | Order results by column. Format is column_name:sort_direction. (optional) (default to CodegenParameter{isFormParam=false, isQueryParam=true, isPathParam=false, isHeaderParam=false, isCookieParam=false, isBodyParam=false, isContainer=false, isCollectionFormatMulti=false, isPrimitiveType=true, isModel=false, isExplode=true, baseName='orderBy', paramName='order_by', dataType='str', datatypeWithEnum='null', dataFormat='null', collectionFormat='null', description='Order results by column. Format is column_name:sort_direction.', unescapedDescription='Order results by column. Format is column_name:sort_direction.', baseType='null', defaultValue='"time:asc"', enumDefaultValue='null', enumName='null', style='FORM', deepObject='false', allowEmptyValue='false', example='"time:asc"', jsonSchema='{
+  "name" : "orderBy",
+  "in" : "query",
+  "description" : "Order results by column. Format is column_name:sort_direction.",
+  "required" : false,
+  "style" : "form",
+  "explode" : true,
+  "schema" : {
+    "type" : "string",
+    "example" : "time:asc",
+    "default" : "time:asc"
+  }
+}', isString=true, isNumeric=false, isInteger=false, isShort=false, isLong=false, isUnboundedInteger=false, isNumber=false, isFloat=false, isDouble=false, isDecimal=false, isByteArray=false, isBinary=false, isBoolean=false, isDate=false, isDateTime=false, isUuid=false, isUri=false, isEmail=false, isFreeFormObject=false, isAnyType=false, isArray=false, isMap=false, isFile=false, isEnum=false, _enum=null, allowableValues=null, items=null, mostInnerItems=null, additionalProperties=null, vars=[], requiredVars=[], vendorExtensions={}, hasValidation=false, maxProperties=null, minProperties=null, isNullable=false, isDeprecated=false, required=false, maximum='null', exclusiveMaximum=false, minimum='null', exclusiveMinimum=false, maxLength=null, minLength=null, pattern='null', maxItems=null, minItems=null, uniqueItems=false, uniqueItemsBoolean=null, contentType=null, multipleOf=null, isNull=false, getAdditionalPropertiesIsAnyType=false, getHasVars=false, getHasRequired=false, getHasDiscriminatorWithNonEmptyMapping=false, composedSchemas=null, hasMultipleTypes=false, schema=CodegenProperty{openApiType='string', baseName='OrderBySchema', complexType='null', getter='getOrderBy', setter='setOrderBy', description='null', dataType='str', datatypeWithEnum='str', dataFormat='null', name='order_by', min='null', max='null', defaultValue='"time:asc"', defaultValueWithParam=' = data.orderBy;', baseType='str', containerType='null', title='null', unescapedDescription='null', maxLength=null, minLength=null, pattern='null', example='"time:asc"', jsonSchema='{
+  "type" : "string",
+  "example" : "time:asc",
+  "default" : "time:asc"
+}', minimum='null', maximum='null', exclusiveMinimum=false, exclusiveMaximum=false, required=false, deprecated=false, hasMoreNonReadOnly=false, isPrimitiveType=true, isModel=false, isContainer=false, isString=true, isNumeric=false, isInteger=false, isShort=false, isLong=false, isUnboundedInteger=false, isNumber=false, isFloat=false, isDouble=false, isDecimal=false, isByteArray=false, isBinary=false, isFile=false, isBoolean=false, isDate=false, isDateTime=false, isUuid=false, isUri=false, isEmail=false, isFreeFormObject=false, isArray=false, isMap=false, isEnum=false, isInnerEnum=false, isAnyType=false, isReadOnly=false, isWriteOnly=false, isNullable=false, isSelfReference=false, isCircularReference=false, isDiscriminator=false, _enum=null, allowableValues=null, items=null, additionalProperties=null, vars=[], requiredVars=[], mostInnerItems=null, vendorExtensions={}, hasValidation=false, isInherited=false, discriminatorValue='null', nameInCamelCase='OrderBy', nameInSnakeCase='null', enumName='null', maxItems=null, minItems=null, maxProperties=null, minProperties=null, uniqueItems=false, uniqueItemsBoolean=null, multipleOf=null, isXmlAttribute=false, xmlPrefix='null', xmlName='null', xmlNamespace='null', isXmlWrapped=false, isNull=false, getAdditionalPropertiesIsAnyType=false, getHasVars=false, getHasRequired=false, getHasDiscriminatorWithNonEmptyMapping=false, composedSchemas=null, hasMultipleTypes=false, requiredVarsMap=null, ref=null, schemaIsFromAdditionalProperties=false, isBooleanSchemaTrue=false, isBooleanSchemaFalse=false, format=null, dependentRequired=null, contains=null}, content=null, requiredVarsMap=null, ref=null, schemaIsFromAdditionalProperties=false})
+limit = 100 # int | Maximum number of results to return (optional) (default to CodegenParameter{isFormParam=false, isQueryParam=true, isPathParam=false, isHeaderParam=false, isCookieParam=false, isBodyParam=false, isContainer=false, isCollectionFormatMulti=false, isPrimitiveType=true, isModel=false, isExplode=true, baseName='limit', paramName='limit', dataType='int', datatypeWithEnum='null', dataFormat='null', collectionFormat='null', description='Maximum number of results to return', unescapedDescription='Maximum number of results to return', baseType='null', defaultValue='100', enumDefaultValue='null', enumName='null', style='FORM', deepObject='false', allowEmptyValue='false', example='100', jsonSchema='{
+  "name" : "limit",
+  "in" : "query",
+  "description" : "Maximum number of results to return",
+  "required" : false,
+  "style" : "form",
+  "explode" : true,
+  "schema" : {
+    "maximum" : 1000,
+    "minimum" : 0,
+    "type" : "integer",
+    "default" : 100
+  }
+}', isString=false, isNumeric=false, isInteger=true, isShort=false, isLong=false, isUnboundedInteger=true, isNumber=false, isFloat=false, isDouble=false, isDecimal=false, isByteArray=false, isBinary=false, isBoolean=false, isDate=false, isDateTime=false, isUuid=false, isUri=false, isEmail=false, isFreeFormObject=false, isAnyType=false, isArray=false, isMap=false, isFile=false, isEnum=false, _enum=null, allowableValues=null, items=null, mostInnerItems=null, additionalProperties=null, vars=[], requiredVars=[], vendorExtensions={}, hasValidation=true, maxProperties=null, minProperties=null, isNullable=false, isDeprecated=false, required=false, maximum='1000', exclusiveMaximum=false, minimum='0', exclusiveMinimum=false, maxLength=null, minLength=null, pattern='null', maxItems=null, minItems=null, uniqueItems=false, uniqueItemsBoolean=null, contentType=null, multipleOf=null, isNull=false, getAdditionalPropertiesIsAnyType=false, getHasVars=false, getHasRequired=false, getHasDiscriminatorWithNonEmptyMapping=false, composedSchemas=null, hasMultipleTypes=false, schema=CodegenProperty{openApiType='integer', baseName='LimitSchema', complexType='null', getter='getLimit', setter='setLimit', description='null', dataType='int', datatypeWithEnum='int', dataFormat='null', name='limit', min='null', max='null', defaultValue='100', defaultValueWithParam=' = data.limit;', baseType='int', containerType='null', title='null', unescapedDescription='null', maxLength=null, minLength=null, pattern='null', example='100', jsonSchema='{
+  "maximum" : 1000,
+  "minimum" : 0,
+  "type" : "integer",
+  "default" : 100
+}', minimum='0', maximum='1000', exclusiveMinimum=false, exclusiveMaximum=false, required=false, deprecated=false, hasMoreNonReadOnly=false, isPrimitiveType=true, isModel=false, isContainer=false, isString=false, isNumeric=false, isInteger=true, isShort=false, isLong=false, isUnboundedInteger=true, isNumber=false, isFloat=false, isDouble=false, isDecimal=false, isByteArray=false, isBinary=false, isFile=false, isBoolean=false, isDate=false, isDateTime=false, isUuid=false, isUri=false, isEmail=false, isFreeFormObject=false, isArray=false, isMap=false, isEnum=false, isInnerEnum=false, isAnyType=false, isReadOnly=false, isWriteOnly=false, isNullable=false, isSelfReference=false, isCircularReference=false, isDiscriminator=false, _enum=null, allowableValues=null, items=null, additionalProperties=null, vars=[], requiredVars=[], mostInnerItems=null, vendorExtensions={}, hasValidation=true, isInherited=false, discriminatorValue='null', nameInCamelCase='Limit', nameInSnakeCase='null', enumName='null', maxItems=null, minItems=null, maxProperties=null, minProperties=null, uniqueItems=false, uniqueItemsBoolean=null, multipleOf=null, isXmlAttribute=false, xmlPrefix='null', xmlName='null', xmlNamespace='null', isXmlWrapped=false, isNull=false, getAdditionalPropertiesIsAnyType=false, getHasVars=false, getHasRequired=false, getHasDiscriminatorWithNonEmptyMapping=false, composedSchemas=null, hasMultipleTypes=false, requiredVarsMap=null, ref=null, schemaIsFromAdditionalProperties=false, isBooleanSchemaTrue=false, isBooleanSchemaFalse=false, format=null, dependentRequired=null, contains=null}, content=null, requiredVarsMap=null, ref=null, schemaIsFromAdditionalProperties=false})
+offset = 0 # int | Starting offset (optional) (default to CodegenParameter{isFormParam=false, isQueryParam=true, isPathParam=false, isHeaderParam=false, isCookieParam=false, isBodyParam=false, isContainer=false, isCollectionFormatMulti=false, isPrimitiveType=true, isModel=false, isExplode=true, baseName='offset', paramName='offset', dataType='int', datatypeWithEnum='null', dataFormat='null', collectionFormat='null', description='Starting offset', unescapedDescription='Starting offset', baseType='null', defaultValue='0', enumDefaultValue='null', enumName='null', style='FORM', deepObject='false', allowEmptyValue='false', example='0', jsonSchema='{
+  "name" : "offset",
+  "in" : "query",
+  "description" : "Starting offset",
+  "required" : false,
+  "style" : "form",
+  "explode" : true,
+  "schema" : {
+    "minimum" : 0,
+    "type" : "integer",
+    "default" : 0
+  }
+}', isString=false, isNumeric=false, isInteger=true, isShort=false, isLong=false, isUnboundedInteger=true, isNumber=false, isFloat=false, isDouble=false, isDecimal=false, isByteArray=false, isBinary=false, isBoolean=false, isDate=false, isDateTime=false, isUuid=false, isUri=false, isEmail=false, isFreeFormObject=false, isAnyType=false, isArray=false, isMap=false, isFile=false, isEnum=false, _enum=null, allowableValues=null, items=null, mostInnerItems=null, additionalProperties=null, vars=[], requiredVars=[], vendorExtensions={}, hasValidation=true, maxProperties=null, minProperties=null, isNullable=false, isDeprecated=false, required=false, maximum='null', exclusiveMaximum=false, minimum='0', exclusiveMinimum=false, maxLength=null, minLength=null, pattern='null', maxItems=null, minItems=null, uniqueItems=false, uniqueItemsBoolean=null, contentType=null, multipleOf=null, isNull=false, getAdditionalPropertiesIsAnyType=false, getHasVars=false, getHasRequired=false, getHasDiscriminatorWithNonEmptyMapping=false, composedSchemas=null, hasMultipleTypes=false, schema=CodegenProperty{openApiType='integer', baseName='OffsetSchema', complexType='null', getter='getOffset', setter='setOffset', description='null', dataType='int', datatypeWithEnum='int', dataFormat='null', name='offset', min='null', max='null', defaultValue='0', defaultValueWithParam=' = data.offset;', baseType='int', containerType='null', title='null', unescapedDescription='null', maxLength=null, minLength=null, pattern='null', example='0', jsonSchema='{
+  "minimum" : 0,
+  "type" : "integer",
+  "default" : 0
+}', minimum='0', maximum='null', exclusiveMinimum=false, exclusiveMaximum=false, required=false, deprecated=false, hasMoreNonReadOnly=false, isPrimitiveType=true, isModel=false, isContainer=false, isString=false, isNumeric=false, isInteger=true, isShort=false, isLong=false, isUnboundedInteger=true, isNumber=false, isFloat=false, isDouble=false, isDecimal=false, isByteArray=false, isBinary=false, isFile=false, isBoolean=false, isDate=false, isDateTime=false, isUuid=false, isUri=false, isEmail=false, isFreeFormObject=false, isArray=false, isMap=false, isEnum=false, isInnerEnum=false, isAnyType=false, isReadOnly=false, isWriteOnly=false, isNullable=false, isSelfReference=false, isCircularReference=false, isDiscriminator=false, _enum=null, allowableValues=null, items=null, additionalProperties=null, vars=[], requiredVars=[], mostInnerItems=null, vendorExtensions={}, hasValidation=true, isInherited=false, discriminatorValue='null', nameInCamelCase='Offset', nameInSnakeCase='null', enumName='null', maxItems=null, minItems=null, maxProperties=null, minProperties=null, uniqueItems=false, uniqueItemsBoolean=null, multipleOf=null, isXmlAttribute=false, xmlPrefix='null', xmlName='null', xmlNamespace='null', isXmlWrapped=false, isNull=false, getAdditionalPropertiesIsAnyType=false, getHasVars=false, getHasRequired=false, getHasDiscriminatorWithNonEmptyMapping=false, composedSchemas=null, hasMultipleTypes=false, requiredVarsMap=null, ref=null, schemaIsFromAdditionalProperties=false, isBooleanSchemaTrue=false, isBooleanSchemaFalse=false, format=null, dependentRequired=null, contains=null}, content=null, requiredVarsMap=null, ref=null, schemaIsFromAdditionalProperties=false})
 
     try:
-        api_response = api_instance.get_measurements(filter=filter)
+        api_response = api_instance.get_measurements(start_time=start_timeend_time=end_timesource=sourceorder_by=order_bylimit=limitoffset=offset)
         pprint(api_response)
     except measurements_api_client.ApiException as e:
         print("Exception when calling MeasurementsApi->get_measurements: %s\n" % e)
@@ -191,7 +238,6 @@ Class | Method | HTTP request | Description
 
  - [Acceleration](docs/models/Acceleration.md)
  - [Measurement](docs/models/Measurement.md)
- - [MeasurementFilter](docs/models/MeasurementFilter.md)
  - [MeasurementsDataResponse](docs/models/MeasurementsDataResponse.md)
  - [ProblemDetails](docs/models/ProblemDetails.md)
  - [Sensor](docs/models/Sensor.md)

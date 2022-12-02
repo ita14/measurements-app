@@ -67,24 +67,17 @@ request_body_sensor = api_client.RequestBody(
     },
     required=True,
 )
-SchemaFor204ResponseBodyApplicationJson = Sensor
 
 
 @dataclass
 class ApiResponseFor204(api_client.ApiResponse):
     response: urllib3.HTTPResponse
-    body: typing.Union[
-        SchemaFor204ResponseBodyApplicationJson,
-    ]
+    body: schemas.Unset = schemas.unset
     headers: schemas.Unset = schemas.unset
 
 
 _response_for_204 = api_client.OpenApiResponse(
     response_cls=ApiResponseFor204,
-    content={
-        'application/json': api_client.MediaType(
-            schema=SchemaFor204ResponseBodyApplicationJson),
-    },
 )
 
 
@@ -123,7 +116,6 @@ _status_code_to_response = {
     'default': _response_for_default,
 }
 _all_accept_content_types = (
-    'application/json',
     'application/json; charset=utf-8',
 )
 

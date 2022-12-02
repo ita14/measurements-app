@@ -10,20 +10,20 @@ services:
     ports:
       - "7001:80"
     networks:
-      msn:
+     app:
         ipv4_address: 172.24.0.2
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
 
-  collector:
-    container_name: ruuvi_data_collector
-    hostname: collector.local
-    build: ./src/measurements-collector/
-    depends_on:
-      - db
-    networks:
-      msn:
-        ipv4_address: 172.24.0.3
+  # collector:
+  #   container_name: ruuvi_data_collector
+  #   hostname: collector.local
+  #   build: ./src/measurements-collector/
+  #   depends_on:
+  #     - db
+  #   networks:
+  #     app:
+  #       ipv4_address: 172.24.0.3
 
   db:
     container_name: cosmosdb
@@ -31,8 +31,8 @@ services:
     image: "mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator"
     tty: true
     restart: always
-    mem_limit: 2G
-    cpu_count: 2
+    mem_limit: 3G
+    cpu_count: 4
     environment:
       - AZURE_COSMOS_EMULATOR_PARTITION_COUNT=10
       - AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE=true
@@ -41,13 +41,13 @@ services:
       - "8081:8081"
       - "10251-10254:10251-10254"
     networks:
-      msn:
+      app:
         ipv4_address: 172.24.0.99
     volumes:
        - cosmosdb:/data/db
 
 networks:
-  msn:
+  app:
     ipam:
         driver: default
         config:

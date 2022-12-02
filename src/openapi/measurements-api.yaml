@@ -26,7 +26,52 @@ paths:
       description: Return measurement data for selected time period.
       operationId: getMeasurements
       parameters:
-        - $ref: "#/components/parameters/measurementFilterParam"
+        - in: query
+          name: startTime
+          description: Start time as defined by RFC 3339, section 5.6.
+          schema:
+            type: string
+            format: date-time
+            nullable: true
+          example: "2022-06-21T17:32:28Z"
+        - in: query
+          name: endTime
+          description: End time as defined by RFC 3339, section 5.6.
+          schema:
+            type: string
+            format: date-time
+            nullable: true
+          example: "2022-06-22T17:32:28Z"
+        - in: query
+          name: source
+          description: Measurement source identifier.
+          schema:
+            type: string
+            nullable: true
+            example: "C6:4C:96:B3:20:7E"
+        - in: query
+          name: orderBy
+          description: Order results by column. Format is column_name:sort_direction.
+          schema:
+            type: string
+            default: "time:asc"
+            example: "time:asc"
+        - in: query
+          name: limit
+          description: Maximum number of results to return
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000
+            default: 100
+        - in: query
+          name: offset
+          description: Starting offset
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+
       responses:
         "200":
           description: Measurements response
@@ -160,10 +205,6 @@ paths:
       responses:
         "204":
           description: Sensor updated
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Sensor"
         "404":
           description: Sensor not found
         default:
@@ -357,53 +398,3 @@ components:
             additionalProperties: false
           nullable: true
           readOnly: true
-
-    ########################################################################
-    # Measurement Filter
-    ########################################################################
-    MeasurementFilter:
-      type: object
-      description: Filters for measurement items.
-      additionalProperties: false
-      properties:
-        startTime:
-          description: Start time as defined by RFC 3339, section 5.6.
-          type: string
-          format: date-time
-          nullable: true
-          example: "2022-06-21T17:32:28Z"
-        endTime:
-          description: End time as defined by RFC 3339, section 5.6.
-          type: string
-          format: date-time
-          nullable: true
-          example: "2022-06-22T17:32:28Z"
-        source:
-          description: Measurement source identifier.
-          type: string
-          nullable: true
-          example: "C6:4C:96:B3:20:7E"
-        orderBy:
-          description:
-            Order results by column. Format is column_name:sort_direction.
-          type: string
-          default: "time:asc"
-          example: "time:asc"
-        limit:
-          description: Maximum number of results to return
-          type: integer
-          minimum: 0
-          maximum: 1000
-          default: 100
-        offset:
-          description: Starting offset
-          type: integer
-          minimum: 0
-          default: 0
-
-  parameters:
-    measurementFilterParam:
-      name: filter
-      in: query
-      schema:
-        $ref: "#/components/schemas/MeasurementFilter"
