@@ -103,7 +103,7 @@ function Sensors() {
 
           {data?.map((s) => (
             <SensorGraph
-              key={s.identifier}
+              key={s.id}
               sensor={s}
               startTime={dateRange.startDate ?? new Date()}
               endTime={dateRange.endDate ?? new Date()}

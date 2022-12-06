@@ -10,9 +10,8 @@ dict, frozendict.frozendict,  | frozendict.frozendict,  | Sensor producing measu
 ### Dictionary Keys
 Key | Input Type | Accessed Type | Description | Notes
 ------------ | ------------- | ------------- | ------------- | -------------
-**id** | str,  | str,  | Sensor unique identifier. Generated on insert. | [optional] 
-**identifier** | str,  | str,  | Sensor identifier. For ruuvi tags this is mac address. Must be unique. | [optional] 
-**description** | str,  | str,  | Sensor description. | [optional] 
+**description** | str,  | str,  | Sensor description. | 
+**id** | str,  | str,  | Sensor unique identifier (ruuvitag MAC) | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
 

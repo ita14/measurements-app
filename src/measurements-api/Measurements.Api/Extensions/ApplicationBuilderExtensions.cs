@@ -34,7 +34,7 @@ public static class ApplicationBuilderExtensions
         var interval = TimeSpan.FromMinutes(10);
 
         var sensors = new Faker<Sensor>()
-            .RuleFor(o => o.Identifier, f => f.Internet.Mac())
+            .RuleFor(o => o.Id, f => f.Internet.Mac())
             .RuleFor(o => o.Description, f => f.Lorem.Sentence(2))
             .Generate(sensorCount);
 
@@ -49,7 +49,7 @@ public static class ApplicationBuilderExtensions
 
             var measurements = new Faker<Measurement>()
                 .RuleFor(o => o.Time, f => now.Subtract(interval * f.IndexVariable++))
-                .RuleFor(o => o.Source, f => sensor.Identifier)
+                .RuleFor(o => o.Source, f => sensor.Id)
                 .RuleFor(o => o.Temperature, f => f.Random.Double(15, 25))
                 .RuleFor(o => o.Pressure, f => f.Random.Double(1000, 1010))
                 .RuleFor(o => o.Humidity, f => f.Random.Double(20, 60))

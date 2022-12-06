@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Measurements.Api.Domain.Exceptions;
 using Measurements.Api.Domain.Interfaces.Persistence;
 using MediatR;
@@ -30,11 +31,20 @@ public class UpdateSensorCommandHandler : AsyncRequestHandler<UpdateSensorComman
 
         var existing = await _repo.GetItemAsync(request.Id, ct);
 
-        if (existing == null)
+        if (existing is null)
         {
             throw new EntityNotFoundException($"Sensor {request.Id} not found");
         }
 
         await _repo.UpdateItemAsync(request.Id, _mapper.Map<Domain.Entities.Sensor>(request), ct);
+    }
+}
+
+public class UpdateSensorCommandValidator : AbstractValidator<UpdateSensorCommand>
+{
+    public UpdateSensorCommandValidator()
+    {
+        RuleFor(x => x.Id).NotEmpty();
+        RuleFor(x => x.Description).NotEmpty();
     }
 }

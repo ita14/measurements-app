@@ -7,6 +7,7 @@ services:
     build: ./src/measurements-api/
     depends_on:
       - db
+      - keycloak
     ports:
       - "7001:80"
     networks:
@@ -21,6 +22,7 @@ services:
   #   build: ./src/measurements-collector/
   #   depends_on:
   #     - db
+  #     - keycloak
   #   networks:
   #     app:
   #       ipv4_address: 172.24.0.3
@@ -44,7 +46,32 @@ services:
       app:
         ipv4_address: 172.24.0.99
     volumes:
-       - cosmosdb:/data/db
+      - cosmosdb:/data/db
+
+  keycloak:
+    container_name: keycloak
+    hostname: keycloak.local
+    image: quay.io/keycloak/keycloak:20.0.1
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    ports:
+      - "8080:8080"
+    networks:
+      app:
+        ipv4_address: 172.24.0.98
+    volumes:
+      - keycloak:/opt/keycloak/data
+      - ./src/assets/keycloak/realm:/tmp/realm
+      - ./src/assets/keycloak/realm:/opt/keycloak/data/import
+    command: |
+      start-dev --import-realm
+    # Use below for exporting realm config
+    # command: |
+    #   export \
+    #     --file /tmp/realm/measurements-app.json \
+    #     --realm measurements-app \
+    #     --users realm_file
 
 networks:
   app:
@@ -55,3 +82,4 @@ networks:
 
 volumes:
   cosmosdb:
+  keycloak:

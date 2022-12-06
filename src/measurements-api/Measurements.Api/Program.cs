@@ -14,13 +14,17 @@ Log.Logger = new LoggerConfiguration()
     .Enrich.WithMachineName()
     .CreateLogger();
 
-builder.Services.SetupControllers();
+builder.Services.AddControllers();
 builder.Services.SetupCosmosDb(builder.Configuration);
 builder.Services.SetupMediatr();
 builder.Services.SetupValidation();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
 builder.Host.UseSerilog();
+
+if (builder.Environment.IsProduction())
+{
+    builder.AddKeycloakAuth();
+}
 
 try
 {
@@ -43,14 +47,19 @@ try
             }
         }
     });
-    app.UseAuthorization();
-    app.MapControllers();
-    app.UseCors(opt => opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
     app.UseProblemDetails();
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.UseCors(opt => opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/openapi/measurements-api.yaml", "Measurements API");
     });
+
+    _ = app.Environment.IsDevelopment()
+        ? app.MapControllers().AllowAnonymous()
+        : app.MapControllers().RequireAuthorization();
 
     Log.Information("Starting up...");
     app.Run();

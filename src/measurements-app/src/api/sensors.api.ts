@@ -24,7 +24,7 @@ export function useUpdateSensor() {
 
   return useMutation({
     mutationFn: (sensor: Sensor) => {
-      return api.putSensor({ id: sensor.id ?? '', sensor });
+      return api.putSensor({ id: sensor.id, sensor });
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey }),
     onError: (e) => {

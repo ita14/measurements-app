@@ -67,6 +67,9 @@ public class SearchMeasurementsQueryValidator : AbstractValidator<SearchMeasurem
             .When(x => !string.IsNullOrWhiteSpace(x.OrderBy))
             .WithMessage(
                 "Order by condition format must be [column name]:[asc|desc] and column must exist. Example time:asc");
+
+        RuleFor(x => x.Limit).InclusiveBetween(1, 1000);
+        RuleFor(x => x.Offset).GreaterThanOrEqualTo(0);
     }
 
     private static bool BeValidOrderByFilter(string orderBy)

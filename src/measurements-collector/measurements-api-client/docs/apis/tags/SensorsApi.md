@@ -323,7 +323,6 @@ with measurements_api_client.ApiClient(configuration) as api_client:
     # example passing only required values which don't have defaults set
     body = Sensor(
         id="id_example",
-        identifier="identifier_example",
         description="description_example",
     )
     try:
@@ -426,7 +425,6 @@ with measurements_api_client.ApiClient(configuration) as api_client:
     }
     body = Sensor(
         id="id_example",
-        identifier="identifier_example",
         description="description_example",
     )
     try:

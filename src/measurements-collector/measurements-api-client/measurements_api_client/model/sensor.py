@@ -37,56 +37,53 @@ class Sensor(
 
 
     class MetaOapg:
+        required = {
+            "description",
+            "id",
+        }
         
         class properties:
             id = schemas.StrSchema
-            identifier = schemas.StrSchema
             description = schemas.StrSchema
             __annotations__ = {
                 "id": id,
-                "identifier": identifier,
                 "description": description,
             }
         additional_properties = schemas.NotAnyTypeSchema
     
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["identifier"]) -> MetaOapg.properties.identifier: ...
+    description: MetaOapg.properties.description
+    id: MetaOapg.properties.id
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["description"]) -> MetaOapg.properties.description: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id"], typing_extensions.Literal["identifier"], typing_extensions.Literal["description"], ]):
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
+    
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["description"], typing_extensions.Literal["id"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["description"]) -> MetaOapg.properties.description: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["identifier"]) -> typing.Union[MetaOapg.properties.identifier, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["description"]) -> typing.Union[MetaOapg.properties.description, schemas.Unset]: ...
-    
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id"], typing_extensions.Literal["identifier"], typing_extensions.Literal["description"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["description"], typing_extensions.Literal["id"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
         *args: typing.Union[dict, frozendict.frozendict, ],
-        id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
-        identifier: typing.Union[MetaOapg.properties.identifier, str, schemas.Unset] = schemas.unset,
-        description: typing.Union[MetaOapg.properties.description, str, schemas.Unset] = schemas.unset,
+        description: typing.Union[MetaOapg.properties.description, str, ],
+        id: typing.Union[MetaOapg.properties.id, str, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'Sensor':
         return super().__new__(
             cls,
             *args,
-            id=id,
-            identifier=identifier,
             description=description,
+            id=id,
             _configuration=_configuration,
         )

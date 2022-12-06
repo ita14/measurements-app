@@ -1,4 +1,5 @@
-﻿using Measurements.Api.Domain.Exceptions;
+﻿using FluentValidation;
+using Measurements.Api.Domain.Exceptions;
 using Measurements.Api.Domain.Interfaces.Persistence;
 using MediatR;
 
@@ -31,11 +32,19 @@ public class DeleteSensorCommandHandler : AsyncRequestHandler<DeleteSensorComman
 
         var existing = await _repo.GetItemAsync(request.Id, cancellationToken);
 
-        if (existing == null)
+        if (existing is null)
         {
             throw new EntityNotFoundException($"Sensor {request.Id} not found");
         }
 
         await _repo.DeleteItemAsync(request.Id, cancellationToken);
+    }
+}
+
+public class DeleteSensorCommandValidator : AbstractValidator<DeleteSensorCommand>
+{
+    public DeleteSensorCommandValidator()
+    {
+        RuleFor(x => x.Id).NotEmpty();
     }
 }

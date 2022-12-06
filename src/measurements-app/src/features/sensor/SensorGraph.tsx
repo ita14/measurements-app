@@ -113,7 +113,7 @@ function SensorGraph({ sensor, startTime, endTime }: Props) {
   const theme = useApplicationStore((state) => state.theme);
   const [ref, { width }] = useMeasure<HTMLDivElement>();
   const { isLoading, isError, data, error } = useGetMeasurements(
-    sensor.identifier,
+    sensor.id,
     startTime,
     endTime
   );

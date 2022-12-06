@@ -246,6 +246,9 @@ components:
       type: object
       description: Measurement data from one source
       additionalProperties: false
+      required:
+        - time
+        - source
       properties:
         id:
           type: string
@@ -301,13 +304,13 @@ components:
       type: object
       description: Sensor producing measurements data
       additionalProperties: false
+      required:
+        - id
+        - description
       properties:
         id:
           type: string
-          description: Sensor unique identifier. Generated on insert.
-        identifier:
-          type: string
-          description: Sensor identifier. For ruuvi tags this is mac address. Must be unique.
+          description: Sensor unique identifier (ruuvitag MAC)
         description:
           type: string
           description: Sensor description.
@@ -398,3 +401,21 @@ components:
             additionalProperties: false
           nullable: true
           readOnly: true
+
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://example.com/oauth/token
+          scopes:
+            read: Grants read access
+            write: Grants write access
+            admin: Grants access to admin operations
+        authorizationCode:
+          authorizationUrl: https://example.com/oauth/authorize
+          tokenUrl: https://example.com/oauth/token
+          scopes:
+            read: Grants read access
+            write: Grants write access
+            admin: Grants access to admin operations

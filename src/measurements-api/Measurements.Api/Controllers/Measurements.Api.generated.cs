@@ -19,33 +19,9 @@ namespace OpenApi.Measurements.Api
     using System = global::System;
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.11.1.0 (NJsonSchema v10.4.3.0 (Newtonsoft.Json v12.0.0.0))")]
-    public interface IMeasurementsController
-    {
-        /// <param name="startTime">Start time as defined by RFC 3339, section 5.6.</param>
-        /// <param name="endTime">End time as defined by RFC 3339, section 5.6.</param>
-        /// <param name="source">Measurement source identifier.</param>
-        /// <param name="orderBy">Order results by column. Format is column_name:sort_direction.</param>
-        /// <param name="limit">Maximum number of results to return</param>
-        /// <param name="offset">Starting offset</param>
-        /// <returns>Measurements response</returns>
-        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MeasurementsDataResponse>> MeasurementsAsync(System.DateTime? startTime, System.DateTime? endTime, string source, string orderBy, int limit, int offset, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
-    
-        /// <returns>OK</returns>
-        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> BatchInsertAsync(System.Collections.Generic.IEnumerable<Measurement> body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
-    
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.11.1.0 (NJsonSchema v10.4.3.0 (Newtonsoft.Json v12.0.0.0))")]
     [ApiController]
-    public partial class MeasurementsController : Microsoft.AspNetCore.Mvc.ControllerBase
+    public abstract class MeasurementsControllerBase : Microsoft.AspNetCore.Mvc.ControllerBase
     {
-        private IMeasurementsController _implementation;
-    
-        public MeasurementsController(IMeasurementsController implementation)
-        {
-            _implementation = implementation;
-        }
-    
         /// <param name="startTime">Start time as defined by RFC 3339, section 5.6.</param>
         /// <param name="endTime">End time as defined by RFC 3339, section 5.6.</param>
         /// <param name="source">Measurement source identifier.</param>
@@ -54,91 +30,40 @@ namespace OpenApi.Measurements.Api
         /// <param name="offset">Starting offset</param>
         /// <returns>Measurements response</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("measurements", Name = "getMeasurements")]
-        public System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MeasurementsDataResponse>> Measurements([Microsoft.AspNetCore.Mvc.FromQuery] System.DateTime? startTime, [Microsoft.AspNetCore.Mvc.FromQuery] System.DateTime? endTime, [Microsoft.AspNetCore.Mvc.FromQuery] string source, [Microsoft.AspNetCore.Mvc.FromQuery] string orderBy, [Microsoft.AspNetCore.Mvc.FromQuery] int? limit, [Microsoft.AspNetCore.Mvc.FromQuery] int? offset, System.Threading.CancellationToken cancellationToken)
-        {
-            return _implementation.MeasurementsAsync(startTime, endTime, source, orderBy ?? "time:asc", limit ?? 100, offset ?? 0, cancellationToken);
-        }
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<MeasurementsDataResponse>> Measurements([Microsoft.AspNetCore.Mvc.FromQuery] System.DateTime? startTime, [Microsoft.AspNetCore.Mvc.FromQuery] System.DateTime? endTime, [Microsoft.AspNetCore.Mvc.FromQuery] string source, [Microsoft.AspNetCore.Mvc.FromQuery] string orderBy = "time:asc", [Microsoft.AspNetCore.Mvc.FromQuery] int? limit = 100, [Microsoft.AspNetCore.Mvc.FromQuery] int? offset = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
     
         /// <returns>OK</returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("measurements/batch-insert", Name = "postMeasurements")]
-        public System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> BatchInsert([Microsoft.AspNetCore.Mvc.FromBody] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] System.Collections.Generic.IEnumerable<Measurement> body, System.Threading.CancellationToken cancellationToken)
-        {
-            return _implementation.BatchInsertAsync(body, cancellationToken);
-        }
-    
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.11.1.0 (NJsonSchema v10.4.3.0 (Newtonsoft.Json v12.0.0.0))")]
-    public interface ISensorsController
-    {
-        /// <returns>Sensors response</returns>
-        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<System.Collections.Generic.ICollection<Sensor>>> SensorsGetAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
-    
-        /// <returns>Sensor response</returns>
-        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Sensor>> SensorsPostAsync(Sensor body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
-    
-        /// <param name="id">Id of sensor to fetch</param>
-        /// <returns>Sensor response</returns>
-        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Sensor>> SensorsGetAsync(string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
-    
-        /// <param name="id">Id of sensor to update</param>
-        /// <returns>Sensor updated</returns>
-        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> SensorsPutAsync(Sensor body, string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
-    
-        /// <param name="id">Id of sensor to delete</param>
-        /// <returns>Sensor deleted</returns>
-        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> SensorsDeleteAsync(string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> BatchInsert([Microsoft.AspNetCore.Mvc.FromBody] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] System.Collections.Generic.IEnumerable<Measurement> body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
     
     }
     
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.11.1.0 (NJsonSchema v10.4.3.0 (Newtonsoft.Json v12.0.0.0))")]
     [ApiController]
-    public partial class SensorsController : Microsoft.AspNetCore.Mvc.ControllerBase
+    public abstract class SensorsControllerBase : Microsoft.AspNetCore.Mvc.ControllerBase
     {
-        private ISensorsController _implementation;
-    
-        public SensorsController(ISensorsController implementation)
-        {
-            _implementation = implementation;
-        }
-    
         /// <returns>Sensors response</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("sensors", Name = "getSensors")]
-        public System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<System.Collections.Generic.ICollection<Sensor>>> SensorsGet(System.Threading.CancellationToken cancellationToken)
-        {
-            return _implementation.SensorsGetAsync(cancellationToken);
-        }
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<System.Collections.Generic.ICollection<Sensor>>> SensorsGet(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
     
         /// <returns>Sensor response</returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("sensors", Name = "postSensor")]
-        public System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Sensor>> SensorsPost([Microsoft.AspNetCore.Mvc.FromBody] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] Sensor body, System.Threading.CancellationToken cancellationToken)
-        {
-            return _implementation.SensorsPostAsync(body, cancellationToken);
-        }
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Sensor>> SensorsPost([Microsoft.AspNetCore.Mvc.FromBody] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] Sensor body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
     
         /// <param name="id">Id of sensor to fetch</param>
         /// <returns>Sensor response</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("sensors/{id}", Name = "getSensorById")]
-        public System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Sensor>> SensorsGet([Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string id, System.Threading.CancellationToken cancellationToken)
-        {
-            return _implementation.SensorsGetAsync(id, cancellationToken);
-        }
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Sensor>> SensorsGet([Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
     
         /// <param name="id">Id of sensor to update</param>
         /// <returns>Sensor updated</returns>
         [Microsoft.AspNetCore.Mvc.HttpPut, Microsoft.AspNetCore.Mvc.Route("sensors/{id}", Name = "putSensor")]
-        public System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> SensorsPut([Microsoft.AspNetCore.Mvc.FromBody] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] Sensor body, [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string id, System.Threading.CancellationToken cancellationToken)
-        {
-            return _implementation.SensorsPutAsync(body, id, cancellationToken);
-        }
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> SensorsPut([Microsoft.AspNetCore.Mvc.FromBody] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] Sensor body, [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
     
         /// <param name="id">Id of sensor to delete</param>
         /// <returns>Sensor deleted</returns>
         [Microsoft.AspNetCore.Mvc.HttpDelete, Microsoft.AspNetCore.Mvc.Route("sensors/{id}", Name = "deleteSensor")]
-        public System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> SensorsDelete([Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string id, System.Threading.CancellationToken cancellationToken)
-        {
-            return _implementation.SensorsDeleteAsync(id, cancellationToken);
-        }
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> SensorsDelete([Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
     
     }
 
@@ -152,10 +77,12 @@ namespace OpenApi.Measurements.Api
     
         /// <summary>Measurement time as defined by RFC 3339, section 5.6, for example, 2017-07-21T17:32:28Z</summary>
         [System.Text.Json.Serialization.JsonPropertyName("time")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public System.DateTime Time { get; set; }
     
         /// <summary>Source of measurement. With ruuvi tag this is MAC.</summary>
         [System.Text.Json.Serialization.JsonPropertyName("source")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string Source { get; set; }
     
         /// <summary>Temperature in celsius.</summary>
@@ -203,16 +130,14 @@ namespace OpenApi.Measurements.Api
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.4.3.0 (Newtonsoft.Json v12.0.0.0)")]
     public partial class Sensor 
     {
-        /// <summary>Sensor unique identifier. Generated on insert.</summary>
+        /// <summary>Sensor unique identifier (ruuvitag MAC)</summary>
         [System.Text.Json.Serialization.JsonPropertyName("id")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string Id { get; set; }
-    
-        /// <summary>Sensor identifier. For ruuvi tags this is mac address. Must be unique.</summary>
-        [System.Text.Json.Serialization.JsonPropertyName("identifier")]
-        public string Identifier { get; set; }
     
         /// <summary>Sensor description.</summary>
         [System.Text.Json.Serialization.JsonPropertyName("description")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string Description { get; set; }
     
     

@@ -37,11 +37,15 @@ class Measurement(
 
 
     class MetaOapg:
+        required = {
+            "source",
+            "time",
+        }
         
         class properties:
-            id = schemas.StrSchema
             time = schemas.DateTimeSchema
             source = schemas.StrSchema
+            id = schemas.StrSchema
             temperature = schemas.Float64Schema
             pressure = schemas.Float64Schema
             humidity = schemas.Float64Schema
@@ -51,9 +55,9 @@ class Measurement(
             def acceleration() -> typing.Type['Acceleration']:
                 return Acceleration
             __annotations__ = {
-                "id": id,
                 "time": time,
                 "source": source,
+                "id": id,
                 "temperature": temperature,
                 "pressure": pressure,
                 "humidity": humidity,
@@ -62,14 +66,17 @@ class Measurement(
             }
         additional_properties = schemas.NotAnyTypeSchema
     
+    source: MetaOapg.properties.source
+    time: MetaOapg.properties.time
+    
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
+    def __getitem__(self, name: typing_extensions.Literal["source"]) -> MetaOapg.properties.source: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["time"]) -> MetaOapg.properties.time: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["source"]) -> MetaOapg.properties.source: ...
+    def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["temperature"]) -> MetaOapg.properties.temperature: ...
@@ -86,18 +93,18 @@ class Measurement(
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["acceleration"]) -> 'Acceleration': ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id"], typing_extensions.Literal["time"], typing_extensions.Literal["source"], typing_extensions.Literal["temperature"], typing_extensions.Literal["pressure"], typing_extensions.Literal["humidity"], typing_extensions.Literal["battery"], typing_extensions.Literal["acceleration"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["source"], typing_extensions.Literal["time"], typing_extensions.Literal["id"], typing_extensions.Literal["temperature"], typing_extensions.Literal["pressure"], typing_extensions.Literal["humidity"], typing_extensions.Literal["battery"], typing_extensions.Literal["acceleration"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["source"]) -> MetaOapg.properties.source: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["time"]) -> MetaOapg.properties.time: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["time"]) -> typing.Union[MetaOapg.properties.time, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["source"]) -> typing.Union[MetaOapg.properties.source, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["temperature"]) -> typing.Union[MetaOapg.properties.temperature, schemas.Unset]: ...
@@ -114,15 +121,15 @@ class Measurement(
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["acceleration"]) -> typing.Union['Acceleration', schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id"], typing_extensions.Literal["time"], typing_extensions.Literal["source"], typing_extensions.Literal["temperature"], typing_extensions.Literal["pressure"], typing_extensions.Literal["humidity"], typing_extensions.Literal["battery"], typing_extensions.Literal["acceleration"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["source"], typing_extensions.Literal["time"], typing_extensions.Literal["id"], typing_extensions.Literal["temperature"], typing_extensions.Literal["pressure"], typing_extensions.Literal["humidity"], typing_extensions.Literal["battery"], typing_extensions.Literal["acceleration"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
         *args: typing.Union[dict, frozendict.frozendict, ],
+        source: typing.Union[MetaOapg.properties.source, str, ],
+        time: typing.Union[MetaOapg.properties.time, str, datetime, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
-        time: typing.Union[MetaOapg.properties.time, str, datetime, schemas.Unset] = schemas.unset,
-        source: typing.Union[MetaOapg.properties.source, str, schemas.Unset] = schemas.unset,
         temperature: typing.Union[MetaOapg.properties.temperature, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         pressure: typing.Union[MetaOapg.properties.pressure, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         humidity: typing.Union[MetaOapg.properties.humidity, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
@@ -133,9 +140,9 @@ class Measurement(
         return super().__new__(
             cls,
             *args,
-            id=id,
-            time=time,
             source=source,
+            time=time,
+            id=id,
             temperature=temperature,
             pressure=pressure,
             humidity=humidity,

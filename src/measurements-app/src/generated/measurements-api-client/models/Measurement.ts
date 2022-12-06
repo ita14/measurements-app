@@ -37,13 +37,13 @@ export interface Measurement {
      * @type {Date}
      * @memberof Measurement
      */
-    time?: Date;
+    time: Date;
     /**
      * Source of measurement. With ruuvi tag this is MAC.
      * @type {string}
      * @memberof Measurement
      */
-    source?: string;
+    source: string;
     /**
      * Temperature in celsius.
      * @type {number}
@@ -81,6 +81,8 @@ export interface Measurement {
  */
 export function instanceOfMeasurement(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "time" in value;
+    isInstance = isInstance && "source" in value;
 
     return isInstance;
 }
@@ -96,8 +98,8 @@ export function MeasurementFromJSONTyped(json: any, ignoreDiscriminator: boolean
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'time': !exists(json, 'time') ? undefined : (new Date(json['time'])),
-        'source': !exists(json, 'source') ? undefined : json['source'],
+        'time': (new Date(json['time'])),
+        'source': json['source'],
         'temperature': !exists(json, 'temperature') ? undefined : json['temperature'],
         'pressure': !exists(json, 'pressure') ? undefined : json['pressure'],
         'humidity': !exists(json, 'humidity') ? undefined : json['humidity'],
@@ -116,7 +118,7 @@ export function MeasurementToJSON(value?: Measurement | null): any {
     return {
         
         'id': value.id,
-        'time': value.time === undefined ? undefined : (value.time.toISOString()),
+        'time': (value.time.toISOString()),
         'source': value.source,
         'temperature': value.temperature,
         'pressure': value.pressure,

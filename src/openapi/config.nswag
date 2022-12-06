@@ -12,7 +12,7 @@
   "codeGenerators": {
     "openApiToCSharpController": {
       "controllerBaseClass": "Microsoft.AspNetCore.Mvc.ControllerBase",
-      "controllerStyle": "Partial",
+      "controllerStyle": "Abstract",
       "controllerTarget": "AspNetCore",
       "useCancellationToken": true,
       "useActionResultType": true,

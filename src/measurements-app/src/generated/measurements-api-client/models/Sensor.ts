@@ -20,23 +20,17 @@ import { exists, mapValues } from '../runtime';
  */
 export interface Sensor {
     /**
-     * Sensor unique identifier. Generated on insert.
+     * Sensor unique identifier (ruuvitag MAC)
      * @type {string}
      * @memberof Sensor
      */
-    id?: string;
-    /**
-     * Sensor identifier. For ruuvi tags this is mac address. Must be unique.
-     * @type {string}
-     * @memberof Sensor
-     */
-    identifier?: string;
+    id: string;
     /**
      * Sensor description.
      * @type {string}
      * @memberof Sensor
      */
-    description?: string;
+    description: string;
 }
 
 /**
@@ -44,6 +38,8 @@ export interface Sensor {
  */
 export function instanceOfSensor(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "id" in value;
+    isInstance = isInstance && "description" in value;
 
     return isInstance;
 }
@@ -58,9 +54,8 @@ export function SensorFromJSONTyped(json: any, ignoreDiscriminator: boolean): Se
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'identifier': !exists(json, 'identifier') ? undefined : json['identifier'],
-        'description': !exists(json, 'description') ? undefined : json['description'],
+        'id': json['id'],
+        'description': json['description'],
     };
 }
 
@@ -74,7 +69,6 @@ export function SensorToJSON(value?: Sensor | null): any {
     return {
         
         'id': value.id,
-        'identifier': value.identifier,
         'description': value.description,
     };
 }

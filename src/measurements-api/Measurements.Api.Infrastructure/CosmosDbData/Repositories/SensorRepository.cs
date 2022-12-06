@@ -13,7 +13,7 @@ public class SensorRepository : CosmosDbRepository<Sensor>, ISensorRepository
     {
     }
 
-    public override string GenerateId(Sensor entity) => Guid.NewGuid().ToString();
+    public override string GenerateId(Sensor entity) => entity.Id;
 
     public override PartitionKey ResolvePartitionKey(string entityId) => new PartitionKey(entityId);
 }

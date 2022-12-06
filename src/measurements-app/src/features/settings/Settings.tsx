@@ -35,7 +35,7 @@ function Settings() {
     const defaultValues = data?.reduce(
       (a, v) => ({
         ...a,
-        [v.identifier ?? '']: v.description
+        [v.id]: v.description
       }),
       []
     );
@@ -44,8 +44,7 @@ function Settings() {
 
   const onSubmit = handleSubmit(async () => {
     const updated = Object.keys(dirtyFields).map<Sensor>((field: string) => ({
-      id: data?.find((x) => x.identifier == field)?.id,
-      identifier: field,
+      id: field,
       description: getValues(field)
     }));
 
@@ -93,22 +92,18 @@ function Settings() {
         <Box component="form" onSubmit={onSubmit}>
           {data?.map((x) => (
             <Box
-              key={x.identifier}
+              key={x.id}
               sx={{ display: 'flex', paddingTop: 2, paddingBottom: 2 }}
             >
               <TextField
-                {...register(x.identifier ?? '', { required: true })}
-                id={x.identifier}
-                name={x.identifier}
-                label={x.identifier}
+                {...register(x.id, { required: true })}
+                id={x.id}
+                name={x.id}
+                label={x.id}
                 variant="standard"
                 margin="dense"
-                error={!!errors[x.identifier ?? '']}
-                helperText={
-                  errors[x.identifier ?? '']
-                    ? 'Description cannot be empty'
-                    : ''
-                }
+                error={!!errors[x.id]}
+                helperText={errors[x.id] ? 'Description cannot be empty' : ''}
                 fullWidth
               />
               <IconButton onClick={() => handleDelete(x)}>
