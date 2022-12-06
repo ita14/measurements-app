@@ -1,9 +1,11 @@
-﻿using AutoMapper;
+﻿using Ardalis.Specification;
+using AutoMapper;
 using FluentValidation;
 using Measurements.Api.Domain.Interfaces.Persistence;
 using Measurements.Api.Domain.Specifications;
 using MediatR;
 using OpenApi.Measurements.Api;
+using Measurement = OpenApi.Measurements.Api.Measurement;
 
 namespace Measurements.Api.Application.Measurements.Queries;
 
@@ -40,19 +42,26 @@ public class SearchMeasurementsQueryHandler : IRequestHandler<SearchMeasurements
 
     public async Task<MeasurementsDataResponse> Handle(SearchMeasurementsQuery request, CancellationToken cancellationToken)
     {
-        var spec = new MeasurementSearchSpec(
+        var searchSpec = new MeasurementSearchSpec(
             request.StartTime,
             request.EndTime,
-            request.Source,
+            request.Source);
+
+        var pagingSpec = new PagingSpec<Domain.Entities.Measurement>(
             request.Limit,
             request.Offset,
             request.SortCondition);
 
-        var result = await _repo.SearchItemsAsync(spec, cancellationToken);
+        var result = await _repo.SearchItemsAsync(
+            new ISpecification<Domain.Entities.Measurement>[] {searchSpec, pagingSpec},
+            cancellationToken);
+
+        var total = await _repo.GetItemsCountAsync(searchSpec, cancellationToken);
 
         return new MeasurementsDataResponse
         {
             Count = result.Count(),
+            Total = total,
             Items = _mapper.Map<List<Measurement>>(result)
         };
     }
