@@ -80,11 +80,6 @@ public abstract class CosmosDbRepository<T> : IRepository<T>, IContainerContext<
         return results;
     }
 
-    public async Task<IEnumerable<T>> SearchItemsAsync(CancellationToken ct)
-    {
-        return await SearchItemsAsync(new ISpecification<T>[]{}, ct);
-    }
-
     /// <summary>
     /// Insert multiple items. This takes advantage of
     /// <a href="https://devblogs.microsoft.com/cosmosdb/introducing-bulk-support-in-the-net-sdk">cosmos db bulk insert.</a>

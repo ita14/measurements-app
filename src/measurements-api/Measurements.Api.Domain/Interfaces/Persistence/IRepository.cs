@@ -16,8 +16,6 @@ public interface IRepository<T>
         ISpecification<T>[] specifications,
         CancellationToken ct = default);
 
-    public Task<IEnumerable<T>> SearchItemsAsync(CancellationToken ct = default);
-
     public Task BatchInsertAsync(IEnumerable<T> items, CancellationToken ct = default);
 
     public Task<int> GetCountAsync(CancellationToken ct = default);
