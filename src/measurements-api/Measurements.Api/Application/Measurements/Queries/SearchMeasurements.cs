@@ -45,16 +45,12 @@ public class SearchMeasurementsQueryHandler : IRequestHandler<SearchMeasurements
         var searchSpec = new MeasurementSearchSpec(
             request.StartTime,
             request.EndTime,
-            request.Source);
-
-        var pagingSpec = new PagingSpec<Domain.Entities.Measurement>(
+            request.Source,
             request.Limit,
             request.Offset,
             request.SortCondition);
 
-        var result = await _repo.SearchItemsAsync(
-            new ISpecification<Domain.Entities.Measurement>[] {searchSpec, pagingSpec},
-            cancellationToken);
+        var result = await _repo.SearchItemsAsync(searchSpec, cancellationToken);
 
         var total = await _repo.GetItemsCountAsync(searchSpec, cancellationToken);
 

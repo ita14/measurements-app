@@ -63,9 +63,9 @@ public abstract class CosmosDbRepository<T> : IRepository<T>, IContainerContext<
         await _container.DeleteItemAsync<T>(id, ResolvePartitionKey(id), cancellationToken: ct);
     }
 
-    public async Task<IEnumerable<T>> SearchItemsAsync(ISpecification<T>[] specifications, CancellationToken ct)
+    public async Task<IEnumerable<T>> SearchItemsAsync(ISpecification<T>? specification, CancellationToken ct)
     {
-        var queryable = ApplySpecifications(specifications);
+        var queryable = ApplySpecification(specification);
 
         using var iterator = queryable.ToFeedIterator<T>();
 
@@ -106,12 +106,12 @@ public abstract class CosmosDbRepository<T> : IRepository<T>, IContainerContext<
 
     public async Task<int> GetItemsCountAsync(ISpecification<T> specification, CancellationToken ct)
     {
-        var queryable = ApplySpecification(specification);
+        var queryable = ApplySpecification(specification, true);
         var response = await queryable.CountAsync(ct);
         return response;
     }
 
-    private IQueryable<T>? ApplySpecification(ISpecification<T>? specification)
+    private IQueryable<T>? ApplySpecification(ISpecification<T>? specification, bool evaluateCriteriaOnly = false)
     {
         if (specification is null)
         {
@@ -119,18 +119,6 @@ public abstract class CosmosDbRepository<T> : IRepository<T>, IContainerContext<
         }
 
         var evaluator = new SpecificationEvaluator();
-        return evaluator.GetQuery(_container.GetItemLinqQueryable<T>(), specification);
-    }
-
-    private IQueryable<T> ApplySpecifications(IEnumerable<ISpecification<T>> specifications)
-    {
-        IQueryable<T>? query = null;
-
-        foreach (var specification in specifications)
-        {
-            query = ApplySpecification(specification);
-        }
-
-        return query ?? _container.GetItemLinqQueryable<T>();
+        return evaluator.GetQuery(_container.GetItemLinqQueryable<T>(), specification, evaluateCriteriaOnly);
     }
 }

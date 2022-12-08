@@ -12,9 +12,7 @@ public interface IRepository<T>
 
     public Task DeleteItemAsync(string id, CancellationToken ct = default);
 
-    public Task<IEnumerable<T>> SearchItemsAsync(
-        ISpecification<T>[] specifications,
-        CancellationToken ct = default);
+    public Task<IEnumerable<T>> SearchItemsAsync(ISpecification<T>? specification = null, CancellationToken ct = default);
 
     public Task BatchInsertAsync(IEnumerable<T> items, CancellationToken ct = default);
 

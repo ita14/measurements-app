@@ -24,7 +24,7 @@ public class SensorsController : SensorsControllerBase
     [AllowAnonymous]
     public override async Task<ActionResult<ICollection<Sensor>>> SensorsGet(CancellationToken cancellationToken = default(CancellationToken))
     {
-        var result = await _repo.SearchItemsAsync(cancellationToken);
+        var result = await _repo.SearchItemsAsync(ct: cancellationToken);
 
         return Ok(_mapper.Map<IEnumerable<Sensor>>(result));
     }
