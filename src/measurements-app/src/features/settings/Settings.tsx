@@ -2,14 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Spinner } from '../../components';
 import { useForm } from 'react-hook-form';
 import { Sensor } from '../../generated/measurements-api-client';
-import {
-  Button,
-  Paper,
-  TextField,
-  Box,
-  Container,
-  IconButton
-} from '@mui/material';
+import { Button, Paper, TextField, Box, Container, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { NewSensorDialog } from './NewSensorDialog';
 import {
@@ -81,20 +74,13 @@ function Settings() {
 
   return (
     <Container maxWidth="md">
-      <NewSensorDialog
-        isOpen={isOpen}
-        onCancel={() => setIsOpen(false)}
-        onCreate={handleAdd}
-      />
+      <NewSensorDialog isOpen={isOpen} onCancel={() => setIsOpen(false)} onCreate={handleAdd} />
 
       <Paper elevation={3} sx={{ padding: 2 }}>
         <h2>Sensors</h2>
         <Box component="form" onSubmit={onSubmit}>
           {data?.map((x) => (
-            <Box
-              key={x.id}
-              sx={{ display: 'flex', paddingTop: 2, paddingBottom: 2 }}
-            >
+            <Box key={x.id} sx={{ display: 'flex', paddingTop: 2, paddingBottom: 2 }}>
               <TextField
                 {...register(x.id, { required: true })}
                 id={x.id}

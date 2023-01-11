@@ -1,12 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import NotificationService from '../features/utils/notification-service';
-import {
-  ProblemDetails,
-  Sensor,
-  SensorsApi
-} from '../generated/measurements-api-client';
+import { ProblemDetails, Sensor, SensorsApi } from '../generated/measurements-api-client';
+import { apiConfig } from './auth';
 
-const api = new SensorsApi();
+const api = new SensorsApi(apiConfig);
 const queryKey = ['sensors'];
 
 export function useGetSensors() {

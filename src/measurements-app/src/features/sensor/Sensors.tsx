@@ -29,10 +29,7 @@ function Sensors() {
   const [isOpen, setIsOpen] = useState(false);
   const { isLoading, isError, data, error } = useGetSensors();
 
-  const handleRangeSelect = (
-    event: React.MouseEvent<HTMLElement>,
-    newValue: Ranges
-  ) => {
+  const handleRangeSelect = (event: React.MouseEvent<HTMLElement>, newValue: Ranges) => {
     if (newValue !== null) {
       setRangeSelect(newValue);
     } else {

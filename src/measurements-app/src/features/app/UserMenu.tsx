@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Menu, MenuItem } from '@mui/material';
+import { useKeycloak } from '@react-keycloak/web';
 
 function UserMenu() {
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
+  const { keycloak } = useKeycloak();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -13,25 +15,27 @@ function UserMenu() {
     setAnchorEl(null);
   };
 
-  const handleLogin = () => {};
+  const handleLogin = () => {
+    keycloak?.login();
+  };
 
-  const handleLogout = () => {};
-
-  const user = {};
+  const handleLogout = () => {
+    keycloak.logout();
+  };
 
   return (
     <>
-      {user ? (
+      {keycloak.authenticated ? (
         <>
           <Button color="inherit" onClick={handleClick}>
-            Username
+            {keycloak?.idTokenParsed?.preferred_username}
           </Button>
 
           <Menu
             anchorEl={anchorEl}
-            keepMounted={true}
             open={Boolean(anchorEl)}
             onClose={handleClose}
+            onClick={handleClose}
           >
             <MenuItem to="/settings" component={Link}>
               Settings
@@ -41,7 +45,7 @@ function UserMenu() {
         </>
       ) : (
         <Button color="inherit" onClick={handleLogin}>
-          Admin Login
+          Login
         </Button>
       )}
     </>

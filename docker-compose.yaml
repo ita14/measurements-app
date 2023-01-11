@@ -66,7 +66,8 @@ services:
       - ./src/assets/keycloak/realm:/opt/keycloak/data/import
     command: |
       start-dev --import-realm
-    # Use below for exporting realm config
+    # Use below for exporting realm config. Authorization block may have to be
+    # manually removed from the configuration.
     # command: |
     #   export \
     #     --file /tmp/realm/measurements-app.json \

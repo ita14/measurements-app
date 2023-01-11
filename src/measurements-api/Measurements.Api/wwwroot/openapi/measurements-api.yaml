@@ -94,6 +94,8 @@ paths:
 
   /measurements/batch-insert:
     post:
+      security:
+        - bearerAuth: []
       tags:
         - Measurements
       description: Create multiple measurements.
@@ -132,6 +134,8 @@ paths:
                 items:
                   $ref: "#/components/schemas/Sensor"
     post:
+      security:
+        - bearerAuth: []
       tags:
         - Sensors
       description: Create sensor.
@@ -184,6 +188,8 @@ paths:
               schema:
                 $ref: "#/components/schemas/ProblemDetails"
     put:
+      security:
+        - bearerAuth: []
       tags:
         - Sensors
       description: Update sensor
@@ -214,6 +220,8 @@ paths:
               schema:
                 $ref: "#/components/schemas/ProblemDetails"
     delete:
+      security:
+        - bearerAuth: []
       tags:
         - Sensors
       description: Delete sensor
@@ -403,19 +411,6 @@ components:
           readOnly: true
 
   securitySchemes:
-    OAuth2:
-      type: oauth2
-      flows:
-        clientCredentials:
-          tokenUrl: https://example.com/oauth/token
-          scopes:
-            read: Grants read access
-            write: Grants write access
-            admin: Grants access to admin operations
-        authorizationCode:
-          authorizationUrl: https://example.com/oauth/authorize
-          tokenUrl: https://example.com/oauth/token
-          scopes:
-            read: Grants read access
-            write: Grants write access
-            admin: Grants access to admin operations
+    bearerAuth:
+      type: http
+      scheme: bearer

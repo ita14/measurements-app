@@ -18,11 +18,7 @@ export interface NewSensorDialogProps {
   onCancel: () => void;
 }
 
-export function NewSensorDialog({
-  isOpen,
-  onCreate,
-  onCancel
-}: NewSensorDialogProps) {
+export function NewSensorDialog({ isOpen, onCreate, onCancel }: NewSensorDialogProps) {
   const {
     handleSubmit,
     register,
@@ -31,7 +27,7 @@ export function NewSensorDialog({
 
   const onSubmit = handleSubmit((data) => {
     const newSensor: Sensor = {
-      identifier: data.identifier,
+      id: data.id,
       description: data.description
     };
 
@@ -48,8 +44,7 @@ export function NewSensorDialog({
       <Box component="form" onSubmit={onSubmit}>
         <DialogContent>
           <DialogContentText>
-            Give description and identifier for new sensor. Identifier must be
-            unique.
+            Give description and identifier for new sensor. Identifier must be unique.
           </DialogContentText>
 
           <TextField
@@ -57,8 +52,8 @@ export function NewSensorDialog({
             margin="dense"
             label="Identifier"
             variant="standard"
-            error={!!errors.identifier}
-            helperText={errors.identifier ? 'Field is mandatory' : ''}
+            error={!!errors.id}
+            helperText={errors.id ? 'Field is mandatory' : ''}
             fullWidth
           />
           <TextField
@@ -66,8 +61,8 @@ export function NewSensorDialog({
             margin="dense"
             label="Description"
             variant="standard"
-            error={!!errors.description}
-            helperText={errors.description ? 'Field is mandatory' : ''}
+            error={!!errors.id}
+            helperText={errors.id ? 'Field is mandatory' : ''}
             fullWidth
           />
         </DialogContent>

@@ -245,27 +245,10 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Authorization
 
-
-## OAuth2
-
-- **Type**: OAuth
-- **Flow**: application
-- **Authorization URL**: 
-- **Scopes**: 
- - **read**: Grants read access
- - **write**: Grants write access
- - **admin**: Grants access to admin operations
-
  Authentication schemes defined for the API:
-## OAuth2
+## bearerAuth
 
-- **Type**: OAuth
-- **Flow**: accessCode
-- **Authorization URL**: https://example.com/oauth/authorize
-- **Scopes**: 
- - **read**: Grants read access
- - **write**: Grants write access
- - **admin**: Grants access to admin operations
+- **Type**: Bearer authentication
 
 
 ## Author

@@ -112,11 +112,7 @@ export interface Props {
 function SensorGraph({ sensor, startTime, endTime }: Props) {
   const theme = useApplicationStore((state) => state.theme);
   const [ref, { width }] = useMeasure<HTMLDivElement>();
-  const { isLoading, isError, data, error } = useGetMeasurements(
-    sensor.id,
-    startTime,
-    endTime
-  );
+  const { isLoading, isError, data, error } = useGetMeasurements(sensor.id, startTime, endTime);
 
   const memoizedData = useMemo(() => {
     if (data === undefined || data.length === 0) {
@@ -167,14 +163,8 @@ function SensorGraph({ sensor, startTime, endTime }: Props) {
       ) : (
         <>
           <Typography variant="h5">{memoizedData.summaryRow}</Typography>
-          <UPlotChart
-            options={getChart1Options(width, theme)}
-            data={memoizedData.alignedData[0]}
-          />
-          <UPlotChart
-            options={getChart2Options(width, theme)}
-            data={memoizedData.alignedData[1]}
-          />
+          <UPlotChart options={getChart1Options(width, theme)} data={memoizedData.alignedData[0]} />
+          <UPlotChart options={getChart2Options(width, theme)} data={memoizedData.alignedData[1]} />
         </>
       )}
     </Paper>

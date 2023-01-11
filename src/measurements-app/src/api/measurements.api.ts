@@ -6,14 +6,11 @@ import {
   MeasurementsDataResponse,
   ProblemDetails
 } from '../generated/measurements-api-client';
+import { apiConfig } from './auth';
 
-const api = new MeasurementsApi();
+const api = new MeasurementsApi(apiConfig);
 
-export function useGetMeasurements(
-  source: string | undefined,
-  startTime: Date,
-  endTime: Date
-) {
+export function useGetMeasurements(source: string | undefined, startTime: Date, endTime: Date) {
   return useQuery<Measurement[], ProblemDetails>({
     queryKey: ['measurements', source, startTime, endTime],
     queryFn: async () => {

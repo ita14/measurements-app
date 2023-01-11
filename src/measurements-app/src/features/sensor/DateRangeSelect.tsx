@@ -38,11 +38,7 @@ function DateRangeSelect({ isOpen, dateRange, onChange, onToggleOpen }: Props) {
           {formatDate(dateRange.startDate)} - {formatDate(dateRange.endDate)}
         </Typography>
       </div>
-      <DateRangePicker
-        open={isOpen}
-        onChange={handleDateChange}
-        toggle={onToggleOpen}
-      />
+      <DateRangePicker open={isOpen} onChange={handleDateChange} toggle={onToggleOpen} />
     </Box>
   );
 }

@@ -182,6 +182,7 @@ Create multiple measurements.
 
 ### Example
 
+* Bearer Authentication (bearerAuth):
 ```python
 import measurements_api_client
 from measurements_api_client.apis.tags import measurements_api
@@ -194,6 +195,15 @@ configuration = measurements_api_client.Configuration(
     host = "http://localhost:7001"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization: bearerAuth
+configuration = measurements_api_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 # Enter a context with an instance of the API client
 with measurements_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
@@ -279,7 +289,7 @@ Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../../../README.md#bearerAuth)
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
 
