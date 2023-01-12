@@ -16,6 +16,18 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
 
+  app:
+    container_name: measurements-app
+    hostname: measurements-app.local
+    build: ./src/measurements-app/
+    depends_on:
+      - api
+    ports:
+      - "8001:80"
+    networks:
+      app:
+        ipv4_address: 172.24.0.3
+
   # collector:
   #   container_name: ruuvi_data_collector
   #   hostname: collector.local

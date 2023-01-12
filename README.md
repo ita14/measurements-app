@@ -1,6 +1,6 @@
 # measurements-app
 
-Exercise for collecting [RuuviTag](https://ruuvi.com/fi/ruuvitag/) data and displaying data in React app.
+Exercise for collecting [RuuviTag](https://ruuvi.com/fi/ruuvitag/) measurements displaying them in React app.
 
 ![react app](/images/app.png)
 
@@ -18,7 +18,7 @@ Net7 API for managing sensors and storing measurements data.
 
 Python script for collecting RuuviTag data and publishing it to the API.
 
-## Development
+## Start local environment
 
 Build images
 
@@ -31,6 +31,8 @@ Start environment
 ```
 docker compose up -d
 ```
+
+Open React application at http://localhost:8001
 
 Stop
 
@@ -45,13 +47,6 @@ docker compose down -v --remove-orphans
 ```
 
 ## Keycloak
-
-For token validation keycload host in docker container and host must be the same. Add keycloak to hosts file.
-In windows hosts file is in `C:\Windows\System32\drivers\etc`.
-
-```
-127.0.0.1 keycloak.local
-```
 
 Use `admin` username and `admin` password to access [Keycloak admin panel](http://keycloak.local:8080/admin).
 
