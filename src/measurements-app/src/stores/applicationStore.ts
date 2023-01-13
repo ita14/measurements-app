@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { persist, devtools } from 'zustand/middleware';
 
 export type Theme = 'dark' | 'light';
@@ -16,7 +16,7 @@ export const useApplicationStore = create<ApplicationState>()(
         setTheme: (theme) => set({ theme })
       }),
       {
-        name: 'app-storage'
+        name: 'application-store'
       }
     )
   )

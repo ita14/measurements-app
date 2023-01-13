@@ -105,8 +105,8 @@ function getChart2Options(width: number, theme: string | undefined): Options {
 
 export interface Props {
   sensor: Sensor;
-  startTime: Date;
-  endTime: Date;
+  startTime: number | Date;
+  endTime: number | Date;
 }
 
 function SensorGraph({ sensor, startTime, endTime }: Props) {

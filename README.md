@@ -34,6 +34,9 @@ docker compose up -d
 
 Open React application at http://localhost:8001
 
+Keycloak Realm is configured having user `user` with password `foobar` which can be used for logging into React app.
+Logging is required for accessing sensor settings.
+
 Stop
 
 ```
@@ -49,8 +52,6 @@ docker compose down -v --remove-orphans
 ## Keycloak
 
 Use `admin` username and `admin` password to access [Keycloak admin panel](http://keycloak.local:8080/admin).
-
-Realm is configured having user `user` with password `foobar` which can be used for logging into React app. Logging is required for accessing sensor settings.
 
 https://www.keycloak.org/getting-started/getting-started-docker
 
