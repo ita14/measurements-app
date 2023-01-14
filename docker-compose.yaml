@@ -58,7 +58,7 @@ services:
       app:
         ipv4_address: 172.24.0.99
     volumes:
-      - cosmosdb:/data/db
+      - cosmosdb:/tmp/cosmos/appdata/
 
   keycloak:
     container_name: keycloak

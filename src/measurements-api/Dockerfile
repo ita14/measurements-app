@@ -12,6 +12,7 @@ WORKDIR /src
 COPY . .
 
 RUN dotnet restore
+RUN dotnet test
 RUN dotnet publish --no-restore -c Release -o /app
 
 FROM base AS final

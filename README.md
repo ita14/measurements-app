@@ -20,22 +20,21 @@ Python script for collecting RuuviTag data and publishing it to the API.
 
 ## Start local environment
 
-Build images
+Build and start
 
 ```
 docker compose build
-```
-
-Start environment
-
-```
 docker compose up -d
 ```
 
-Open React application at http://localhost:8001
+Following table lists components and url's...
 
-Keycloak Realm is configured having user `user` with password `foobar` which can be used for logging into React app.
-Logging is required for accessing sensor settings.
+| Component               | Url                                          | Notes                       |
+| ----------------------- | -------------------------------------------- | --------------------------- |
+| React app               | http://localhost:8001                        | Username `user` pw `foobar` |
+| Keycloak admin panel    | http://keycloak.local:8080/admin             | Username `admin` pw `admin` |
+| Cosmos DB management UI | https://localhost:8081/\_explorer/index.html |                             |
+| API swagger doc         | http://localhost:7001/swagger                |                             |
 
 Stop
 
@@ -49,15 +48,7 @@ Stop and remove volumes
 docker compose down -v --remove-orphans
 ```
 
-## Keycloak
-
-Use `admin` username and `admin` password to access [Keycloak admin panel](http://keycloak.local:8080/admin).
-
-https://www.keycloak.org/getting-started/getting-started-docker
-
 ## Cosmos DB
-
-Open emulator management UI at this [address](https://localhost:8081/_explorer/index.html).
 
 To enable https on windows host download certificate...
 
@@ -66,10 +57,6 @@ curl -k https://localhost:8081/_explorer/emulator.pem > emulatorcert.crt
 ```
 
 Right-click -> `install certificate.` Place certificate to `Trusted Root Certification Authorities`.
-
-## API
-
-Development API is running at port 7001 and Swagger can be accessed at http://localhost:7001/swagger
 
 ## Code generation
 
@@ -81,3 +68,7 @@ cd src/openapi
 ```
 
 This will generate API controllers and typescript and python clients.
+
+# Links
+
+https://www.keycloak.org/getting-started/getting-started-docker

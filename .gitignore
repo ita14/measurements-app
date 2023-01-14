@@ -352,4 +352,3 @@ MigrationBackup/
 src/openapi/generated/
 
 .idea
-.devcontainer
