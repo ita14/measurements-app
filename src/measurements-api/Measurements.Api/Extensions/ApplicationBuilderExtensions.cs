@@ -2,6 +2,7 @@
 using Measurements.Api.Domain.Entities;
 using Measurements.Api.Domain.Interfaces.Persistence;
 using Measurements.Api.Infrastructure.Interfaces;
+using Sensor = Measurements.Api.Domain.Entities.Sensor;
 
 namespace Measurements.Api.Extensions;
 
@@ -23,23 +24,24 @@ public static class ApplicationBuilderExtensions
         using var scope = builder.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
         var sensorRepo = scope.ServiceProvider.GetRequiredService<ISensorRepository>();
         var measurementsRepo = scope.ServiceProvider.GetRequiredService<IMeasurementRepository>();
+        var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 
         if (await sensorRepo.GetCountAsync() > 0)
         {
             return;
         }
 
-        const int sensorCount = 5;
-        const int measurementCount = 1000;
-        var interval = TimeSpan.FromMinutes(10);
+        var sensors = configuration.GetSection("Sensors").Get<List<Sensor>>();
 
-        var sensors = new Faker<Sensor>()
-            .RuleFor(o => o.Id, f => f.Internet.Mac())
-            .RuleFor(o => o.Description, f => f.Lorem.Sentence(2))
-            .Generate(sensorCount);
+        if (sensors is null || sensors.Count == 0)
+        {
+            return;
+        }
 
         await sensorRepo.BatchInsertAsync(sensors);
 
+        const int measurementCount = 1000;
+        var interval = TimeSpan.FromMinutes(10);
         var now = DateTime.UtcNow;
 
         foreach (var sensor in sensors)

@@ -35,7 +35,7 @@ namespace Measurements.Api.Infrastructure
 
             foreach (ContainerInfo container in _containers)
             {
-                // TODO: figure out bulk insert throttling
+                // Only for development environment with cosmos db emulator.
                 await response.Database.CreateContainerIfNotExistsAsync(container.Name, container.PartitionKey, 10000);
             }
         }
