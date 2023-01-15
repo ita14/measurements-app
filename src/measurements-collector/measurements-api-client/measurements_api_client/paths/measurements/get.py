@@ -49,12 +49,12 @@ class StartTimeSchema(
 
     def __new__(
         cls,
-        *args: typing.Union[None, str, datetime, ],
+        *_args: typing.Union[None, str, datetime, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'StartTimeSchema':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             _configuration=_configuration,
         )
 
@@ -74,12 +74,12 @@ class EndTimeSchema(
 
     def __new__(
         cls,
-        *args: typing.Union[None, str, datetime, ],
+        *_args: typing.Union[None, str, datetime, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'EndTimeSchema':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             _configuration=_configuration,
         )
 
@@ -94,12 +94,12 @@ class SourceSchema(
 
     def __new__(
         cls,
-        *args: typing.Union[None, str, ],
+        *_args: typing.Union[None, str, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'SourceSchema':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             _configuration=_configuration,
         )
 OrderBySchema = schemas.StrSchema
@@ -265,6 +265,7 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _get_measurements_oapg(
         self,
+        skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -347,7 +348,11 @@ class BaseApi(api_client.Api):
                     api_response = api_client.ApiResponseWithoutDeserialization(response=response)
 
         if not 200 <= response.status <= 299:
-            raise exceptions.ApiException(api_response=api_response)
+            raise exceptions.ApiException(
+                status=response.status,
+                reason=response.reason,
+                api_response=api_response
+            )
 
         return api_response
 
@@ -371,6 +376,7 @@ class GetMeasurements(BaseApi):
     @typing.overload
     def get_measurements(
         self,
+        skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -427,6 +433,7 @@ class ApiForget(BaseApi):
     @typing.overload
     def get(
         self,
+        skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,

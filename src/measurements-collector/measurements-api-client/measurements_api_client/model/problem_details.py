@@ -51,12 +51,12 @@ class ProblemDetails(
             
                 def __new__(
                     cls,
-                    *args: typing.Union[None, str, ],
+                    *_args: typing.Union[None, str, ],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                 ) -> 'type':
                     return super().__new__(
                         cls,
-                        *args,
+                        *_args,
                         _configuration=_configuration,
                     )
             
@@ -71,12 +71,12 @@ class ProblemDetails(
             
                 def __new__(
                     cls,
-                    *args: typing.Union[None, str, ],
+                    *_args: typing.Union[None, str, ],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                 ) -> 'title':
                     return super().__new__(
                         cls,
-                        *args,
+                        *_args,
                         _configuration=_configuration,
                     )
             
@@ -96,12 +96,12 @@ class ProblemDetails(
             
                 def __new__(
                     cls,
-                    *args: typing.Union[None, decimal.Decimal, int, ],
+                    *_args: typing.Union[None, decimal.Decimal, int, ],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                 ) -> 'status':
                     return super().__new__(
                         cls,
-                        *args,
+                        *_args,
                         _configuration=_configuration,
                     )
             
@@ -116,12 +116,12 @@ class ProblemDetails(
             
                 def __new__(
                     cls,
-                    *args: typing.Union[None, str, ],
+                    *_args: typing.Union[None, str, ],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                 ) -> 'detail':
                     return super().__new__(
                         cls,
-                        *args,
+                        *_args,
                         _configuration=_configuration,
                     )
             
@@ -136,12 +136,12 @@ class ProblemDetails(
             
                 def __new__(
                     cls,
-                    *args: typing.Union[None, str, ],
+                    *_args: typing.Union[None, str, ],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                 ) -> 'instance':
                     return super().__new__(
                         cls,
-                        *args,
+                        *_args,
                         _configuration=_configuration,
                     )
             
@@ -167,12 +167,12 @@ class ProblemDetails(
                     
                         def __new__(
                             cls,
-                            *args: typing.Union[dict, frozendict.frozendict, ],
+                            *_args: typing.Union[dict, frozendict.frozendict, ],
                             _configuration: typing.Optional[schemas.Configuration] = None,
                         ) -> 'additional_properties':
                             return super().__new__(
                                 cls,
-                                *args,
+                                *_args,
                                 _configuration=_configuration,
                             )
             
@@ -186,13 +186,13 @@ class ProblemDetails(
             
                 def __new__(
                     cls,
-                    *args: typing.Union[dict, frozendict.frozendict, None, ],
+                    *_args: typing.Union[dict, frozendict.frozendict, None, ],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                     **kwargs: typing.Union[MetaOapg.additional_properties, dict, frozendict.frozendict, ],
                 ) -> 'extensions':
                     return super().__new__(
                         cls,
-                        *args,
+                        *_args,
                         _configuration=_configuration,
                         **kwargs,
                     )
@@ -251,7 +251,7 @@ class ProblemDetails(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         type: typing.Union[MetaOapg.properties.type, None, str, schemas.Unset] = schemas.unset,
         title: typing.Union[MetaOapg.properties.title, None, str, schemas.Unset] = schemas.unset,
         status: typing.Union[MetaOapg.properties.status, None, decimal.Decimal, int, schemas.Unset] = schemas.unset,
@@ -262,7 +262,7 @@ class ProblemDetails(
     ) -> 'ProblemDetails':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             type=type,
             title=title,
             status=status,

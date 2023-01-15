@@ -11,7 +11,7 @@ services:
     ports:
       - "7001:80"
     networks:
-     app:
+     measurements-app:
         ipv4_address: 172.24.0.2
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -25,19 +25,20 @@ services:
     ports:
       - "8001:80"
     networks:
-      app:
+      measurements-app:
         ipv4_address: 172.24.0.3
 
-  # collector:
-  #   container_name: ruuvi_data_collector
-  #   hostname: collector.local
-  #   build: ./src/measurements-collector/
-  #   depends_on:
-  #     - db
-  #     - keycloak
-  #   networks:
-  #     app:
-  #       ipv4_address: 172.24.0.3
+  collector:
+    container_name: measurements-collector
+    hostname: measurements-collector.local
+    build: ./src/measurements-collector/
+    depends_on:
+      - db
+      - keycloak
+      - api
+    networks:
+      measurements-app:
+        ipv4_address: 172.24.0.4
 
   db:
     container_name: cosmosdb
@@ -55,7 +56,7 @@ services:
       - "8081:8081"
       - "10251-10254:10251-10254"
     networks:
-      app:
+      measurements-app:
         ipv4_address: 172.24.0.99
     volumes:
       - cosmosdb:/tmp/cosmos/appdata/
@@ -70,7 +71,7 @@ services:
     ports:
       - "8080:8080"
     networks:
-      app:
+      measurements-app:
         ipv4_address: 172.24.0.98
     volumes:
       - keycloak:/opt/keycloak/data
@@ -87,7 +88,7 @@ services:
     #     --users realm_file
 
 networks:
-  app:
+  measurements-app:
     ipam:
         driver: default
         config:

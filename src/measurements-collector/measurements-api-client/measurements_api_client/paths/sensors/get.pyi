@@ -42,12 +42,12 @@ class SchemaFor200ResponseBodyApplicationJson(
 
     def __new__(
         cls,
-        arg: typing.Union[typing.Tuple['Sensor'], typing.List['Sensor']],
+        _arg: typing.Union[typing.Tuple['Sensor'], typing.List['Sensor']],
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'SchemaFor200ResponseBodyApplicationJson':
         return super().__new__(
             cls,
-            arg,
+            _arg,
             _configuration=_configuration,
         )
 
@@ -91,6 +91,7 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _get_sensors_oapg(
         self,
+        skip_deserialization: typing_extensions.Literal[True],
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -146,7 +147,11 @@ class BaseApi(api_client.Api):
                 api_response = api_client.ApiResponseWithoutDeserialization(response=response)
 
         if not 200 <= response.status <= 299:
-            raise exceptions.ApiException(api_response=api_response)
+            raise exceptions.ApiException(
+                status=response.status,
+                reason=response.reason,
+                api_response=api_response
+            )
 
         return api_response
 
@@ -168,6 +173,7 @@ class GetSensors(BaseApi):
     @typing.overload
     def get_sensors(
         self,
+        skip_deserialization: typing_extensions.Literal[True],
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -217,6 +223,7 @@ class ApiForget(BaseApi):
     @typing.overload
     def get(
         self,
+        skip_deserialization: typing_extensions.Literal[True],
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,

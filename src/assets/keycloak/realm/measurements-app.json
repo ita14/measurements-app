@@ -1054,7 +1054,8 @@
         "http://localhost:8001"
       ],
       "webOrigins": [
-        "+"
+        "+",
+        "*"
       ],
       "notBefore": 0,
       "bearerOnly": false,

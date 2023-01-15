@@ -27,14 +27,21 @@ docker compose build
 docker compose up -d
 ```
 
+> **Important** For token validation to work keycloak and react app must have following aliases.On windows `hosts` file can be found from `C:\Windows\System32\drivers\etc`
+
+```
+127.0.0.1 keycloak.local
+127.0.0.1 measurements-app.local
+```
+
 Following table lists components and url's...
 
-| Component               | Url                                          | Notes                       |
-| ----------------------- | -------------------------------------------- | --------------------------- |
-| React app               | http://localhost:8001                        | Username `user` pw `foobar` |
-| Keycloak admin panel    | http://keycloak.local:8080/admin             | Username `admin` pw `admin` |
-| Cosmos DB management UI | https://localhost:8081/\_explorer/index.html |                             |
-| API swagger doc         | http://localhost:7001/swagger                |                             |
+| Component               | Url                                          | Notes                                |
+| ----------------------- | -------------------------------------------- | ------------------------------------ |
+| React app               | http://measurements-app.local:8001           | Username `user` pw `foobar`          |
+| Keycloak admin panel    | http://keycloak.local:8080/admin             | Username `admin` pw `admin`. See (1) |
+| Cosmos DB management UI | https://localhost:8081/\_explorer/index.html |                                      |
+| API swagger doc         | http://localhost:7001/swagger                |                                      |
 
 Stop
 

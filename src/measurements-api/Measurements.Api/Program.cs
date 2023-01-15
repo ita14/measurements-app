@@ -20,11 +20,7 @@ builder.Services.SetupMediatr();
 builder.Services.SetupValidation();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Host.UseSerilog();
-
-if (builder.Environment.IsProduction())
-{
-    builder.AddKeycloakAuth();
-}
+builder.AddKeycloakAuth();
 
 try
 {
@@ -52,14 +48,12 @@ try
     app.UseAuthentication();
     app.UseAuthorization();
     app.UseCors(opt => opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+    app.MapControllers().RequireAuthorization();
+
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/openapi/measurements-api.yaml", "Measurements API");
     });
-
-    _ = app.Environment.IsDevelopment()
-        ? app.MapControllers().AllowAnonymous()
-        : app.MapControllers().RequireAuthorization();
 
     Log.Information("Starting up...");
     app.Run();

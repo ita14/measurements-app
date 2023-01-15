@@ -84,7 +84,7 @@ class Acceleration(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         acceleration: typing.Union[MetaOapg.properties.acceleration, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         accelerationX: typing.Union[MetaOapg.properties.accelerationX, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         accelerationY: typing.Union[MetaOapg.properties.accelerationY, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
@@ -93,7 +93,7 @@ class Acceleration(
     ) -> 'Acceleration':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             acceleration=acceleration,
             accelerationX=accelerationX,
             accelerationY=accelerationY,

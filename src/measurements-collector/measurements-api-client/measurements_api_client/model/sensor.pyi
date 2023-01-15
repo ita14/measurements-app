@@ -75,14 +75,14 @@ class Sensor(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         description: typing.Union[MetaOapg.properties.description, str, ],
         id: typing.Union[MetaOapg.properties.id, str, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'Sensor':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             description=description,
             id=id,
             _configuration=_configuration,

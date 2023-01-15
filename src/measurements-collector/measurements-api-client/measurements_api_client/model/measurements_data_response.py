@@ -56,12 +56,12 @@ class MeasurementsDataResponse(
             
                 def __new__(
                     cls,
-                    arg: typing.Union[typing.Tuple['Measurement'], typing.List['Measurement']],
+                    _arg: typing.Union[typing.Tuple['Measurement'], typing.List['Measurement']],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                 ) -> 'items':
                     return super().__new__(
                         cls,
-                        arg,
+                        _arg,
                         _configuration=_configuration,
                     )
             
@@ -101,7 +101,7 @@ class MeasurementsDataResponse(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         count: typing.Union[MetaOapg.properties.count, decimal.Decimal, int, schemas.Unset] = schemas.unset,
         total: typing.Union[MetaOapg.properties.total, decimal.Decimal, int, schemas.Unset] = schemas.unset,
         items: typing.Union[MetaOapg.properties.items, list, tuple, schemas.Unset] = schemas.unset,
@@ -109,7 +109,7 @@ class MeasurementsDataResponse(
     ) -> 'MeasurementsDataResponse':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             count=count,
             total=total,
             items=items,

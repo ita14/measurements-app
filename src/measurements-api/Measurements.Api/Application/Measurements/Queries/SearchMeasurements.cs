@@ -75,6 +75,8 @@ public class SearchMeasurementsQueryValidator : AbstractValidator<SearchMeasurem
 
         RuleFor(x => x.Limit).InclusiveBetween(1, 1000);
         RuleFor(x => x.Offset).GreaterThanOrEqualTo(0);
+
+        // TODO: Validation for time range
     }
 
     private static bool BeValidOrderByFilter(string orderBy)

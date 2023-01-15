@@ -11,3 +11,10 @@ macs = [
     'D8:4E:92:B8:86:22',
     'EA:04:8D:66:BE:87'
 ]
+
+# Keycloak authentication (client credentials flow).
+token_endpoint = 'http://keycloak.local:8080/realms/measurements-app/protocol/openid-connect/token'
+client_id = 'measurements-collector'
+client_secret = 'Pb4pMgu8ZB8pJEJViRoRqKcSxXj4o0Hr'
+realm = 'measurements-app'
+keycloak_url = 'http://keycloak.local:8080'

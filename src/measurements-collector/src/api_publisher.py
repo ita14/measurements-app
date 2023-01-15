@@ -7,6 +7,7 @@ from measurements_api_client.apis.tags import measurements_api
 from measurements_api_client.model.measurement import Measurement
 from config import api_endpoint
 from logger import logger
+from auth import get_token
 
 
 configuration = measurements_api_client.Configuration(
@@ -15,6 +16,8 @@ configuration = measurements_api_client.Configuration(
 
 
 def publish_measurements(measurements: list[Measurement]):
+    configuration.access_token = get_token()
+
     with measurements_api_client.ApiClient(configuration) as api_client:
         api_instance = measurements_api.MeasurementsApi(api_client)
 
@@ -23,3 +26,5 @@ def publish_measurements(measurements: list[Measurement]):
         api_instance.post_measurements(
             body=measurements
         )
+
+        logger.info('DONE')

@@ -126,7 +126,7 @@ class Measurement(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         source: typing.Union[MetaOapg.properties.source, str, ],
         time: typing.Union[MetaOapg.properties.time, str, datetime, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
@@ -139,7 +139,7 @@ class Measurement(
     ) -> 'Measurement':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             source=source,
             time=time,
             id=id,
