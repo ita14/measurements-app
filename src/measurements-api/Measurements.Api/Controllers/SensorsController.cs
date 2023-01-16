@@ -51,6 +51,7 @@ public class SensorsController : SensorsControllerBase
 
     public override async Task<IActionResult> SensorsPut(Sensor body, string id, CancellationToken cancellationToken = default(CancellationToken))
     {
+        body.Id = id;
         var command = _mapper.Map<UpdateSensorCommand>(body);
         await _mediator.Send(command, cancellationToken);
 
