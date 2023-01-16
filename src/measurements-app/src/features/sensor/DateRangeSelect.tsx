@@ -1,11 +1,10 @@
 import React from 'react';
-import { subDays, subMonths, subWeeks } from 'date-fns';
+import { addDays, isAfter, isBefore, subDays, subMonths, subWeeks } from 'date-fns';
 import { Box, TextField, ToggleButtonGroup, ToggleButton } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useMeasurementsStore } from '../../stores/measurementsStore';
-import NotificationService from '../utils/notification-service';
 
 const enum Ranges {
   Day,
@@ -21,12 +20,9 @@ function DateRangeSelect() {
       return;
     }
 
-    const newRange = isStart ? { ...dateRange, start: date } : { ...dateRange, end: date };
-
-    if (newRange.start > newRange.end) {
-      NotificationService.error('Start time must be less than end time.');
-      return;
-    }
+    const newRange = isStart
+      ? { start: date, end: isBefore(date, dateRange.end) ? dateRange.end : addDays(date, 1) }
+      : { start: isAfter(date, dateRange.end) ? dateRange.start : subDays(date, 1), end: date };
 
     setDateRange(newRange);
   };
