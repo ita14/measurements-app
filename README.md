@@ -1,6 +1,6 @@
 # measurements-app
 
-Exercise for collecting [RuuviTag](https://ruuvi.com/fi/ruuvitag/) measurements displaying them in React app.
+Exercise for collecting [RuuviTag](https://ruuvi.com/fi/ruuvitag/) measurements and displaying them in React app.
 
 ![react app](/images/app.png)
 
@@ -27,7 +27,9 @@ docker compose build
 docker compose up -d
 ```
 
-> **Important** For token validation to work keycloak and react app must have following aliases.On windows `hosts` file can be found from `C:\Windows\System32\drivers\etc`
+After system is up collector will publish mock data on 30 second intervals.
+
+> For token validation to work keycloak and react app must have following aliases.On windows `hosts` file can be found from `C:\Windows\System32\drivers\etc`
 
 ```
 127.0.0.1 keycloak.local
@@ -76,6 +78,11 @@ cd src/openapi
 
 This will generate API controllers and typescript and python clients.
 
-# Links
+## Known issues
+
+Sometimes cosmos db emulator gets stuck on initialization and won't start. In this case
+the Api fails to start as it can't fetch the cosmos db certificate. Restarting the containers should fix the issue.
+
+## Links
 
 https://www.keycloak.org/getting-started/getting-started-docker
