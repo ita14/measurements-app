@@ -16,7 +16,7 @@ public sealed class MeasurementSearchSpec : Specification<Measurement>
 
         if (sortCondition is not null)
         {
-            Query.OrderBy(sortCondition.PropertyExpression,           sortCondition.Direction == SortDirection.Ascending);
+            Query.OrderBy(sortCondition.PropertyExpression, sortCondition.Direction == SortDirection.Ascending);
             Query.OrderByDescending(sortCondition.PropertyExpression, sortCondition.Direction == SortDirection.Descending);
         }
     }

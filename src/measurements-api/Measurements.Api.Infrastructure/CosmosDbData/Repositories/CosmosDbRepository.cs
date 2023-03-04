@@ -23,7 +23,7 @@ public abstract class CosmosDbRepository<T> : IRepository<T>, IContainerContext<
         _logger = logger;
     }
 
-    public abstract string  GenerateId(T entity);
+    public abstract string GenerateId(T entity);
     public abstract PartitionKey ResolvePartitionKey(string entityId);
 
     public async Task<T> AddItemAsync(T item, CancellationToken ct)

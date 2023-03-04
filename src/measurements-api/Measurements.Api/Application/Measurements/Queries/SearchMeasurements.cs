@@ -9,9 +9,9 @@ using Measurement = OpenApi.Measurements.Api.Measurement;
 
 namespace Measurements.Api.Application.Measurements.Queries;
 
-public class SearchMeasurementsQuery: IRequest<MeasurementsDataResponse>
+public class SearchMeasurementsQuery : IRequest<MeasurementsDataResponse>
 {
-    #nullable disable
+#nullable disable
 
     public DateTime? StartTime { get; set; }
     public DateTime? EndTime { get; set; }
