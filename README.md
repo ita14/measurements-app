@@ -12,7 +12,7 @@ React application for charting the measurents data.
 
 ### [measurements-api](src/measurements-api/README.md)
 
-Net7 API for managing sensors and storing measurements data.
+Net Core API for managing sensors and storing measurements data.
 
 ### [measurements-collector](src/measurements-collector/README.md)
 
