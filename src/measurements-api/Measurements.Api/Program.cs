@@ -1,12 +1,15 @@
 using System.Reflection;
 using Hellang.Middleware.ProblemDetails;
 using Measurements.Api.Config;
+using Measurements.Api.Domain.Interfaces;
 using Measurements.Api.Extensions;
+using Measurements.Api.Infrastructure.AppSettings;
+using Measurements.Api.Infrastructure.Extensions;
+using Measurements.Api.Infrastructure.Repositories;
 using Microsoft.AspNetCore.StaticFiles;
 using Serilog;
 
-
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
@@ -15,50 +18,47 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 builder.Services.AddControllers();
-builder.Services.SetupCosmosDb(builder.Configuration);
+builder.Services.AddCosmosDb(builder.Configuration.GetSection("CosmosDB").Get<CosmosDbSettings>());
 builder.Services.SetupMediatr();
 builder.Services.SetupValidation();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+builder.Services.AddScoped(typeof(IReadRepository<>), typeof(EfRepository<>));
 builder.Host.UseSerilog();
-builder.AddKeycloakAuth();
+
+if (builder.Environment.IsProduction())
+{
+    builder.AddKeycloakAuth();
+}
 
 try
 {
-    var app = builder.Build();
+    WebApplication app = builder.Build();
 
-    if (app.Environment.IsDevelopment())
-    {
-        app.EnsureCosmosDbIsCreated().Wait();
-        app.SeedTestDataIfEmptyAsync().Wait();
-    }
+    // TODO: Seed only for dev environment.
+    app.EnsureDbCreated();
+    app.SeedTestDataIfEmptyAsync().Wait();
 
     app.UseHttpsRedirection();
-    app.UseStaticFiles(new StaticFileOptions()
+    app.UseStaticFiles(new StaticFileOptions
     {
-        ContentTypeProvider = new FileExtensionContentTypeProvider()
-        {
-            Mappings =
-            {
-                [".yaml"] ="text/yaml"
-            }
-        }
+        ContentTypeProvider = new FileExtensionContentTypeProvider { Mappings = { [".yaml"] = "text/yaml" } }
     });
 
     app.UseProblemDetails();
     app.UseAuthentication();
     app.UseAuthorization();
     app.UseCors(opt => opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-    app.MapControllers().RequireAuthorization();
 
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/openapi/measurements-api.yaml", "Measurements API");
-    });
+    _ = app.Environment.IsDevelopment()
+        ? app.MapControllers().AllowAnonymous()
+        : app.MapControllers().RequireAuthorization();
+
+    app.UseSwaggerUI(options => { options.SwaggerEndpoint("/openapi/measurements-api.yaml", "Measurements API"); });
 
     Log.Information("Starting up...");
     app.Run();
     Log.Information("Shutting down...");
-
 }
 catch (Exception e)
 {

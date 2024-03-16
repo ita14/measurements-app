@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Measurements.Api.Application;
+using Measurements.Api;
 
 namespace Measurements.UnitTests.Api.Application;
 
@@ -10,7 +10,7 @@ public class MappingProfileTest
     public void Verify_AutomapperProfile()
     {
         var configuration = new MapperConfiguration(cfg =>
-            cfg.AddProfile(new MappingProfile()));
+            cfg.AddProfile(new ApiMappingProfile()));
 
         configuration.AssertConfigurationIsValid();
     }

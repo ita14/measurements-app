@@ -13,8 +13,6 @@ services:
     networks:
      measurements-app:
         ipv4_address: 172.24.0.2
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
 
   app:
     container_name: measurements-app
@@ -43,13 +41,13 @@ services:
   db:
     container_name: cosmosdb
     hostname: cosmosdb.local
-    image: "mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator"
+    image: "mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest"
     tty: true
     restart: always
-    mem_limit: 3G
+    mem_limit: 4G
     cpu_count: 4
     environment:
-      - AZURE_COSMOS_EMULATOR_PARTITION_COUNT=10
+      - AZURE_COSMOS_EMULATOR_PARTITION_COUNT=3
       - AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE=true
       - AZURE_COSMOS_EMULATOR_IP_ADDRESS_OVERRIDE=172.24.0.99
     ports:

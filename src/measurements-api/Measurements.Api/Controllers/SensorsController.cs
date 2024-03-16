@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Measurements.Api.Application.Sensors.Commands;
-using Measurements.Api.Domain.Interfaces.Persistence;
+using Measurements.Api.Application.Commands.Sensors;
+using Measurements.Api.Domain.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +12,9 @@ public class SensorsController : SensorsControllerBase
 {
     private readonly IMapper _mapper;
     private readonly IMediator _mediator;
-    private readonly ISensorRepository _repo;
+    private readonly IReadRepository<Domain.Entities.Sensor> _repo;
 
-    public SensorsController(IMapper mapper, IMediator mediator, ISensorRepository repo)
+    public SensorsController(IMapper mapper, IMediator mediator, IReadRepository<Domain.Entities.Sensor> repo)
     {
         _mapper = mapper;
         _mediator = mediator;
@@ -22,24 +22,29 @@ public class SensorsController : SensorsControllerBase
     }
 
     [AllowAnonymous]
-    public override async Task<ActionResult<ICollection<Sensor>>> SensorsGet(CancellationToken cancellationToken = default(CancellationToken))
+    public override async Task<ActionResult<ICollection<Sensor>>> SensorsGet(
+        CancellationToken cancellationToken = default)
     {
-        var result = await _repo.SearchItemsAsync(ct: cancellationToken);
+        IEnumerable<Domain.Entities.Sensor> items = await _repo.ListAsync(cancellationToken);
 
-        return Ok(_mapper.Map<IEnumerable<Sensor>>(result));
+        return Ok(_mapper.Map<IEnumerable<Sensor>>(items));
     }
 
-    public override async Task<ActionResult<Sensor>> SensorsPost(Sensor body, CancellationToken cancellationToken = default(CancellationToken))
+    public override async Task<ActionResult<Sensor>> SensorsPost(Sensor body,
+        CancellationToken cancellationToken = default)
     {
-        var command = _mapper.Map<CreateSensorCommand>(body);
+        CreateSensorCommand? command = _mapper.Map<CreateSensorCommand>(body);
 
-        return await _mediator.Send(command, cancellationToken);
+        var result = await _mediator.Send(command, cancellationToken);
+
+        return _mapper.Map<Sensor>(result);
     }
 
     [AllowAnonymous]
-    public override async Task<ActionResult<Sensor>> SensorsGet(string id, CancellationToken cancellationToken = default(CancellationToken))
+    public override async Task<ActionResult<Sensor>> SensorsGet(string id,
+        CancellationToken cancellationToken = default)
     {
-        var result = await _repo.GetItemAsync(id, cancellationToken);
+        Domain.Entities.Sensor? result = await _repo.GetByIdAsync(id, cancellationToken);
 
         if (result != null)
         {
@@ -49,18 +54,19 @@ public class SensorsController : SensorsControllerBase
         return NotFound();
     }
 
-    public override async Task<IActionResult> SensorsPut(Sensor body, string id, CancellationToken cancellationToken = default(CancellationToken))
+    public override async Task<IActionResult> SensorsPut(Sensor body, string id,
+        CancellationToken cancellationToken = default)
     {
         body.Id = id;
-        var command = _mapper.Map<UpdateSensorCommand>(body);
+        UpdateSensorCommand? command = _mapper.Map<UpdateSensorCommand>(body);
         await _mediator.Send(command, cancellationToken);
 
         return NoContent();
     }
 
-    public override async Task<IActionResult> SensorsDelete(string id, CancellationToken cancellationToken = default(CancellationToken))
+    public override async Task<IActionResult> SensorsDelete(string id, CancellationToken cancellationToken = default)
     {
-        var command = new DeleteSensorCommand(id);
+        DeleteSensorCommand command = new(id);
         await _mediator.Send(command, cancellationToken);
 
         return NoContent();

@@ -1,40 +1,45 @@
-﻿using Ardalis.Specification;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentValidation;
-using Measurements.Api.Domain.Interfaces.Persistence;
+using Measurements.Api.Domain.Entities;
+using Measurements.Api.Domain.Interfaces;
 using Measurements.Api.Domain.Specifications;
 using MediatR;
-using OpenApi.Measurements.Api;
-using Measurement = OpenApi.Measurements.Api.Measurement;
 
-namespace Measurements.Api.Application.Measurements.Queries;
+namespace Measurements.Api.Application.Queries.Measurements;
 
 public class SearchMeasurementsQuery : IRequest<MeasurementsDataResponse>
 {
 #nullable disable
 
-    public DateTime? StartTime { get; set; }
-    public DateTime? EndTime { get; set; }
-    public string Source { get; set; }
-    public string OrderBy { get; set; }
-    public int Limit { get; set; }
-    public int Offset { get; set; }
+    public DateTime? StartTime { get; init; }
+    public DateTime? EndTime { get; init; }
+    public string Source { get; init; }
+    public string OrderBy { get; init; }
+    public int Limit { get; init; }
+    public int Offset { get; init; }
 
     /// <summary>
     /// Get parsed sort condition.
     /// </summary>
-    public SortCondition<Domain.Entities.Measurement> SortCondition =>
-        SortCondition<Domain.Entities.Measurement>.TryParse(OrderBy, out var condition)
+    public SortCondition<Measurement> SortCondition =>
+        SortCondition<Measurement>.TryParse(OrderBy, out var condition)
             ? condition
             : null;
 }
 
+public class MeasurementsDataResponse
+{
+    public int Count { get; set; }
+    public int Total { get; set; }
+    public List<Measurement> Items { get; set; }
+}
+
 public class SearchMeasurementsQueryHandler : IRequestHandler<SearchMeasurementsQuery, MeasurementsDataResponse>
 {
-    private readonly IMeasurementRepository _repo;
+    private readonly IReadRepository<Measurement> _repo;
     private readonly IMapper _mapper;
 
-    public SearchMeasurementsQueryHandler(IMeasurementRepository repo, IMapper mapper)
+    public SearchMeasurementsQueryHandler(IReadRepository<Measurement> repo, IMapper mapper)
     {
         _repo = repo;
         _mapper = mapper;
@@ -50,13 +55,13 @@ public class SearchMeasurementsQueryHandler : IRequestHandler<SearchMeasurements
             request.Offset,
             request.SortCondition);
 
-        var result = await _repo.SearchItemsAsync(searchSpec, cancellationToken);
+        var result = await _repo.ListAsync(searchSpec, cancellationToken);
 
-        var total = await _repo.GetItemsCountAsync(searchSpec, cancellationToken);
+        var total = await _repo.CountAsync(searchSpec, cancellationToken);
 
         return new MeasurementsDataResponse
         {
-            Count = result.Count(),
+            Count = result.Count,
             Total = total,
             Items = _mapper.Map<List<Measurement>>(result)
         };

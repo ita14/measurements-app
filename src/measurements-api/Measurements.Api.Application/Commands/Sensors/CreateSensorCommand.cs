@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using Measurements.Api.Domain.Interfaces.Persistence;
+using Measurements.Api.Domain.Entities;
+using Measurements.Api.Domain.Interfaces;
 using MediatR;
-using OpenApi.Measurements.Api;
+using Microsoft.Extensions.Logging;
 using ValidationException = Measurements.Api.Domain.Exceptions.ValidationException;
 
-namespace Measurements.Api.Application.Sensors.Commands;
+namespace Measurements.Api.Application.Commands.Sensors;
 
 public class CreateSensorCommand : Sensor, IRequest<Sensor>
 {
@@ -14,11 +15,11 @@ public class CreateSensorCommand : Sensor, IRequest<Sensor>
 public class CreateSensorCommandHandler : IRequestHandler<CreateSensorCommand, Sensor>
 {
     private readonly ILogger<CreateSensorCommandHandler> _logger;
-    private readonly ISensorRepository _repo;
+    private readonly IRepository<Sensor> _repo;
     private readonly IMapper _mapper;
 
     public CreateSensorCommandHandler(ILogger<CreateSensorCommandHandler> logger,
-        ISensorRepository repo, IMapper mapper)
+        IRepository<Sensor> repo, IMapper mapper)
     {
         _logger = logger;
         _repo = repo;
@@ -28,16 +29,16 @@ public class CreateSensorCommandHandler : IRequestHandler<CreateSensorCommand, S
     {
         _logger.LogInformation("Handling CreateSensorCommand...");
 
-        var existing = await _repo.GetItemAsync(request.Id, ct);
+        var existing = await _repo.GetByIdAsync(request.Id, ct);
 
         if (existing is not null)
         {
             throw new ValidationException($"Sensor {request.Id} already exists.");
         }
 
-        var item = _mapper.Map<Domain.Entities.Sensor>(request);
+        var item = _mapper.Map<Sensor>(request);
 
-        return _mapper.Map<Sensor>(await _repo.AddItemAsync(item, ct));
+        return _mapper.Map<Sensor>(await _repo.AddAsync(item, ct));
     }
 }
 

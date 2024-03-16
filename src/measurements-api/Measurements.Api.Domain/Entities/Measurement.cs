@@ -4,7 +4,7 @@
 
 public class Measurement : BaseEntity
 {
-    public System.DateTime Time { get; set; }
+    public DateTime Time { get; set; }
     public string Source { get; set; }
     public double Temperature { get; set; }
     public double Pressure { get; set; }

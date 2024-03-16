@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
 using Measurements.Api.Domain.Exceptions;
-using Measurements.Api.Domain.Interfaces.Persistence;
+using Measurements.Api.Domain.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
-namespace Measurements.Api.Application.Sensors.Commands;
+namespace Measurements.Api.Application.Commands.Sensors;
 
 public class DeleteSensorCommand : IRequest
 {
@@ -15,29 +16,29 @@ public class DeleteSensorCommand : IRequest
     }
 }
 
-public class DeleteSensorCommandHandler : AsyncRequestHandler<DeleteSensorCommand>
+public class DeleteSensorCommandHandler : IRequestHandler<DeleteSensorCommand>
 {
     private readonly ILogger<DeleteSensorCommandHandler> _logger;
-    private readonly ISensorRepository _repo;
+    private readonly IRepository<Domain.Entities.Sensor> _repo;
 
-    public DeleteSensorCommandHandler(ILogger<DeleteSensorCommandHandler> logger, ISensorRepository repo)
+    public DeleteSensorCommandHandler(ILogger<DeleteSensorCommandHandler> logger, IRepository<Domain.Entities.Sensor> repo)
     {
         _logger = logger;
         _repo = repo;
     }
 
-    protected override async Task Handle(DeleteSensorCommand request, CancellationToken cancellationToken)
+    public async Task Handle(DeleteSensorCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handling DeleteSensorCommand...");
 
-        var existing = await _repo.GetItemAsync(request.Id, cancellationToken);
+        var existing = await _repo.GetByIdAsync(request.Id, cancellationToken);
 
         if (existing is null)
         {
             throw new EntityNotFoundException($"Sensor {request.Id} not found");
         }
 
-        await _repo.DeleteItemAsync(request.Id, cancellationToken);
+        await _repo.DeleteAsync(existing, cancellationToken);
     }
 }
 

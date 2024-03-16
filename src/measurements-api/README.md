@@ -1,6 +1,6 @@
 # measurements-api
 
-Net7 api for managing sensors and storing measurements data. This project exercises
+Net8 api for managing sensors and storing measurements data. This project exercises
 
 -   [Clean architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 -   [Specification pattern](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)

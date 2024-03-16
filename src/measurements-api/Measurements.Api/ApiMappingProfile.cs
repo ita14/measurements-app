@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using Measurements.Api.Application.Sensors.Commands;
+using Measurements.Api.Application.Commands.Sensors;
 
-namespace Measurements.Api.Application;
+namespace Measurements.Api;
 
-public class MappingProfile : Profile
+public class ApiMappingProfile : Profile
 {
-    public MappingProfile()
+    public ApiMappingProfile()
     {
         CreateMap<OpenApi.Measurements.Api.Sensor, CreateSensorCommand>().ReverseMap();
         CreateMap<OpenApi.Measurements.Api.Sensor, UpdateSensorCommand>().ReverseMap();
@@ -15,5 +15,7 @@ public class MappingProfile : Profile
 
         CreateMap<OpenApi.Measurements.Api.Measurement, Domain.Entities.Measurement>().ReverseMap();
         CreateMap<OpenApi.Measurements.Api.Acceleration, Domain.Entities.Acceleration>().ReverseMap();
+        CreateMap<Measurements.Api.Application.Queries.Measurements.MeasurementsDataResponse,
+            OpenApi.Measurements.Api.MeasurementsDataResponse>();
     }
 }

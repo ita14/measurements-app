@@ -18,7 +18,7 @@ do
       break
    else
       echo "******* Waiting for retry" $retry "*******"
-      sleep 5
+      sleep 10
    fi
    retry=`expr $retry + 1`
 done
