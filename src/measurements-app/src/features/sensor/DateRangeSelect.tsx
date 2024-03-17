@@ -1,9 +1,9 @@
 import React from 'react';
 import { addDays, isAfter, isBefore, subDays, subMonths, subWeeks } from 'date-fns';
-import { Box, TextField, ToggleButtonGroup, ToggleButton } from '@mui/material';
+import { Box, ToggleButtonGroup, ToggleButton } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
 import { useMeasurementsStore } from '../../stores/measurementsStore';
 
 const enum Ranges {
@@ -15,7 +15,7 @@ const enum Ranges {
 function DateRangeSelect() {
   const { dateRange, setDateRange } = useMeasurementsStore();
 
-  const handleDateChange = (date: number | Date | null, isStart = false) => {
+  const handleDateChange = (date: string | number | Date | null, isStart = false) => {
     if (date === null) {
       return;
     }
@@ -59,7 +59,6 @@ function DateRangeSelect() {
           onChange={(newValue) => {
             handleDateChange(newValue, true);
           }}
-          renderInput={(params) => <TextField {...params} sx={{ marginLeft: 'auto', mr: 1 }} />}
         />
         <DatePicker
           label="End date"
@@ -67,7 +66,6 @@ function DateRangeSelect() {
           onChange={(newValue) => {
             handleDateChange(newValue);
           }}
-          renderInput={(params) => <TextField {...params} />}
         />
       </LocalizationProvider>
     </Box>

@@ -7,22 +7,22 @@ import {
   ProblemDetails
 } from '../generated/measurements-api-client';
 import { apiConfig } from './auth';
-import { isNumber } from 'lodash';
+import { isNumber, isString } from 'lodash';
 
 const api = new MeasurementsApi(apiConfig);
 
 export function useGetMeasurements(
   source: string | undefined,
-  startTime: Date | number,
-  endTime: Date | number
+  startTime: string | Date | number,
+  endTime: string | Date | number
 ) {
   return useQuery<Measurement[], ProblemDetails>({
     queryKey: ['measurements', source, startTime, endTime],
     queryFn: async () => {
       const request: GetMeasurementsRequest = {
         source,
-        startTime: isNumber(startTime) ? new Date(startTime) : startTime,
-        endTime: isNumber(endTime) ? new Date(endTime) : endTime,
+        startTime: isNumber(startTime) || isString(startTime) ? new Date(startTime) : startTime,
+        endTime: isNumber(endTime) || isString(endTime) ? new Date(endTime) : endTime,
         orderBy: 'time:asc'
       };
 
@@ -42,9 +42,6 @@ export function useGetMeasurements(
         request.offset += request.limit;
       } while (response.count == request.limit);
       return measurements;
-    },
-    onError: (e) => {
-      console.error(e);
     },
     refetchOnWindowFocus: false
   });
