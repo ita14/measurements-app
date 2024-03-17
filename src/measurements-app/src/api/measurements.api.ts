@@ -43,9 +43,6 @@ export function useGetMeasurements(
       } while (response.count == request.limit);
       return measurements;
     },
-    //onError: (e) => {
-    //  console.error(e);
-    //},
     refetchOnWindowFocus: false
   });
 }
