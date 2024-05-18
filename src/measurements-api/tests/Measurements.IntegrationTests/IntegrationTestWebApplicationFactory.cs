@@ -1,7 +1,9 @@
 ﻿using DotNet.Testcontainers;
+using DotNet.Testcontainers.Builders;
 using Measurements.Api.Infrastructure.Context;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +31,15 @@ public class IntegrationTestWebApplicationFactory : WebApplicationFactory<Progra
         ConsoleLogger.Instance.DebugLogLevelEnabled = true;
 
         _cosmosDbContainer = new CosmosDbBuilder()
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilMessageIsLogged(@"Started\r?\n"))
+            .WithEnvironment("AZURE_COSMOS_EMULATOR_PARTITION_COUNT", "3")
+            .WithEnvironment("AZURE_COSMOS_EMULATOR_IP_ADDRESS_OVERRIDE", "127.0.0.1")
+            .WithEnvironment("AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE", "true")
+            .WithExposedPort(8081)
+            .WithExposedPort(10251)
+            .WithExposedPort(10252)
+            .WithExposedPort(10253)
+            .WithExposedPort(10254)
             .WithLogger(logger)
             .Build();
     }
@@ -41,7 +52,24 @@ public class IntegrationTestWebApplicationFactory : WebApplicationFactory<Progra
 
             services.AddDbContext<MeasurementsDbContext>(options =>
             {
-                options.UseCosmos(_cosmosDbContainer.GetConnectionString(), "MeasurementsDB")
+                options.UseCosmos(
+                        _cosmosDbContainer.GetConnectionString(),
+                        "MeasurementsDB",
+                        optionsBuilder =>
+                        {
+                            optionsBuilder.ConnectionMode(ConnectionMode.Gateway);
+                            optionsBuilder.LimitToEndpoint();
+                            optionsBuilder.HttpClientFactory(() =>
+                            {
+                                HttpMessageHandler httpMessageHandler = new HttpClientHandler()
+                                {
+                                    ServerCertificateCustomValidationCallback = HttpClientHandler
+                                        .DangerousAcceptAnyServerCertificateValidator
+                                };
+
+                                return new HttpClient(httpMessageHandler);
+                            });
+                        })
                      .EnableDetailedErrors()
                      .EnableSensitiveDataLogging();
             });
@@ -86,6 +114,6 @@ public class IntegrationTestWebApplicationFactory : WebApplicationFactory<Progra
 
     public new Task DisposeAsync()
     {
-        return Task.CompletedTask;
+        return _cosmosDbContainer.DisposeAsync().AsTask();
     }
 }
