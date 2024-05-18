@@ -68,3 +68,9 @@ finally
 {
     Log.CloseAndFlush();
 }
+
+// Allow integration tests to import the class
+// ReSharper disable once ClassNeverInstantiated.Global
+public partial class Program
+{
+}
