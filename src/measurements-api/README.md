@@ -7,3 +7,4 @@ Net8 api for managing sensors and storing measurements data. This project exerci
 -   Data persistence using [Cosmos DB](https://en.wikipedia.org/wiki/Cosmos_DB)
 -   [Mediator pattern](https://en.wikipedia.org/wiki/Mediator_pattern)
 -   Design first API development
+-   Integration testing using [TestContainers](https://dotnet.testcontainers.org)

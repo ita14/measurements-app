@@ -41,8 +41,4 @@
     <ProjectReference Include="..\Measurements.Api.Domain\Measurements.Api.Domain.csproj" />
     <ProjectReference Include="..\Measurements.Api.Infrastructure\Measurements.Api.Infrastructure.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Application" />
-  </ItemGroup>
 </Project>
