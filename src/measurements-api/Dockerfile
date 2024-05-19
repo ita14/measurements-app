@@ -12,7 +12,7 @@ WORKDIR /src
 COPY . .
 
 RUN dotnet restore
-RUN dotnet test
+RUN dotnet test ./tests/Measurements.UnitTests/Measurements.UnitTests.csproj
 RUN dotnet publish --no-restore -c Release -o /app
 
 FROM base AS final
