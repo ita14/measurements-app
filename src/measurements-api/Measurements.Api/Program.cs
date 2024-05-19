@@ -35,9 +35,11 @@ try
 {
     WebApplication app = builder.Build();
 
-    // TODO: Seed only for dev environment.
-    //app.EnsureDbCreated();
-    //app.SeedTestDataIfEmptyAsync().Wait();
+    if (builder.Configuration.GetValue<bool>("SeedData"))
+    {
+       app.EnsureDbCreated();
+       app.SeedTestDataIfEmptyAsync().Wait();
+    }
 
     app.UseHttpsRedirection();
     app.UseStaticFiles(new StaticFileOptions

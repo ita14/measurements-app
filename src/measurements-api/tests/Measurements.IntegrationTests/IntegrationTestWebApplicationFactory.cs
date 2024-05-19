@@ -5,11 +5,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
-using Respawn;
 using Testcontainers.CosmosDb;
 
 namespace Measurements.IntegrationTests;
@@ -17,8 +15,8 @@ namespace Measurements.IntegrationTests;
 // ReSharper disable once ClassNeverInstantiated.Global
 public class IntegrationTestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
+    private const bool UseHostDb = false;
     private readonly CosmosDbContainer _cosmosDbContainer;
-    private DatabaseFacade? _database;
 
     public IntegrationTestWebApplicationFactory()
     {
@@ -30,16 +28,19 @@ public class IntegrationTestWebApplicationFactory : WebApplicationFactory<Progra
         var logger = loggerFactory.CreateLogger("test-containers");
         ConsoleLogger.Instance.DebugLogLevelEnabled = true;
 
+        // TODO: Container is super slow to start. Wait check using "Started" log is not enough
+        // but we should poll the /_explorer/emulator.pem path. UntilHttpRequestIsSucceeded is not
+        // usable here because of the cert issue. Should probably use custom wait strategy with
+        // HttpClient skipping cert validation. For now just sleep after container up.
         _cosmosDbContainer = new CosmosDbBuilder()
             .WithWaitStrategy(Wait.ForUnixContainer().UntilMessageIsLogged(@"Started\r?\n"))
+            //.WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(request => request.ForPath("/_explorer/emulator.pem").ForPort(8081).UsingTls()))
             .WithEnvironment("AZURE_COSMOS_EMULATOR_PARTITION_COUNT", "3")
-            .WithEnvironment("AZURE_COSMOS_EMULATOR_IP_ADDRESS_OVERRIDE", "127.0.0.1")
-            .WithEnvironment("AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE", "true")
-            .WithExposedPort(8081)
-            .WithExposedPort(10251)
-            .WithExposedPort(10252)
-            .WithExposedPort(10253)
-            .WithExposedPort(10254)
+            .WithPortBinding(8081, true)
+            .WithPortBinding(10251, 10251)
+            .WithPortBinding(10252, 10252)
+            .WithPortBinding(10253, 10253)
+            .WithPortBinding(10254, 10254)
             .WithLogger(logger)
             .Build();
     }
@@ -53,7 +54,7 @@ public class IntegrationTestWebApplicationFactory : WebApplicationFactory<Progra
             services.AddDbContext<MeasurementsDbContext>(options =>
             {
                 options.UseCosmos(
-                        _cosmosDbContainer.GetConnectionString(),
+                        GetConnectionString(),
                         "MeasurementsDB",
                         optionsBuilder =>
                         {
@@ -61,59 +62,41 @@ public class IntegrationTestWebApplicationFactory : WebApplicationFactory<Progra
                             optionsBuilder.LimitToEndpoint();
                             optionsBuilder.HttpClientFactory(() =>
                             {
-                                HttpMessageHandler httpMessageHandler = new HttpClientHandler()
+                                var handler = new HttpClientHandler
                                 {
-                                    ServerCertificateCustomValidationCallback = HttpClientHandler
-                                        .DangerousAcceptAnyServerCertificateValidator
+                                    ServerCertificateCustomValidationCallback =
+                                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
                                 };
-
-                                return new HttpClient(httpMessageHandler);
+                                return new HttpClient(handler);
                             });
                         })
                      .EnableDetailedErrors()
                      .EnableSensitiveDataLogging();
             });
-
-            // Build an intermediate service provider.
-            var serviceProvider = services.BuildServiceProvider();
-
-            // Create a scope to obtain a reference to the database context.
-            using var scope = serviceProvider.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<MeasurementsDbContext>();
-
-            // Ensure the database is created.
-            db.Database.EnsureCreated();
-
-            _database = db.Database;
         });
-    }
-
-    public async Task ResetDataAsync()
-    {
-        if (_database is null)
-        {
-            // Database is not yet initialized
-            return;
-        }
-
-        var connection = _database.GetDbConnection();
-
-        await connection.OpenAsync();
-
-        var reSpawner = await Respawner.CreateAsync(connection);
-
-        await reSpawner.ResetAsync(connection);
-
-        await connection.CloseAsync();
     }
 
     public async Task InitializeAsync()
     {
+        if (UseHostDb) return;
+
         await _cosmosDbContainer.StartAsync();
+
+        // See comments from container build.
+        await Task.Delay(TimeSpan.FromMinutes(3));
     }
 
     public new Task DisposeAsync()
     {
-        return _cosmosDbContainer.DisposeAsync().AsTask();
+        return UseHostDb
+            ? Task.CompletedTask
+            : _cosmosDbContainer.DisposeAsync().AsTask();
+    }
+
+    private string GetConnectionString()
+    {
+        return UseHostDb
+            ? "AccountEndpoint=https://localhost:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=="
+            : _cosmosDbContainer.GetConnectionString();
     }
 }

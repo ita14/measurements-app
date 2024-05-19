@@ -9,8 +9,6 @@ public class IntegrationTestBase
 {
     private readonly IntegrationTestWebApplicationFactory _factory;
 
-    protected IServiceProvider Services => _factory.Services;
-
     protected HttpClient Client { get; }
 
     protected MeasurementsDbContext Context => GetScopedService<MeasurementsDbContext>();
@@ -44,11 +42,12 @@ public class IntegrationTestBase
         return entities;
     }
 
-    /// <summary>
-    /// Clears the database and resets the data to the initial state
-    /// </summary>
     private void ResetData()
     {
-        _factory.ResetDataAsync().Wait();
+        using var scope = _factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<MeasurementsDbContext>();
+
+        db.Database.EnsureDeleted();
+        db.Database.EnsureCreated();
     }
 }
