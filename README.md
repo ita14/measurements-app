@@ -42,7 +42,7 @@ Following table lists components and url's...
 | ----------------------- | -------------------------------------------- |------------------------------|
 | React app               | http://measurements-app.local:8001           | Username `user` pw `foobar`  |
 | Keycloak admin panel    | http://keycloak.local:8080/admin             | Username `admin` pw `admin`  |
-| Cosmos DB management UI | https://localhost:8081/\_explorer/index.html |                              |
+| PostgreSQL Database     | postgresql://localhost:5432/MeasurementsDB   | Username `measurements_user` pw `measurements_pass` |
 | API swagger doc         | http://localhost:7001/swagger                |                              |
 
 Stop
@@ -57,15 +57,16 @@ Stop and remove volumes
 docker compose down -v --remove-orphans
 ```
 
-## Cosmos DB
+## PostgreSQL + TimescaleDB
 
-To enable https on windows host download certificate...
+The application uses PostgreSQL with TimescaleDB extension for optimized time-series data storage. TimescaleDB automatically:
 
-```
-curl -k https://localhost:8081/_explorer/emulator.pem > emulatorcert.crt
-```
+- Partitions measurement data by time (1-day chunks)
+- Compresses data older than 7 days (90%+ storage reduction)  
+- Automatically deletes data older than 1 year
+- Optimizes queries for time-range operations
 
-Right-click -> `install certificate.` Place certificate to `Trusted Root Certification Authorities`.
+You can connect to the database using any PostgreSQL client with the credentials listed above.
 
 ## Code generation
 
@@ -80,8 +81,7 @@ This will generate API controllers and typescript and python clients.
 
 ## Known issues
 
-Sometimes cosmos db emulator gets stuck on initialization and won't start. In this case
-the Api fails to start as it can't fetch the cosmos db certificate. Restarting the containers should fix the issue.
+None currently known with the PostgreSQL + TimescaleDB setup.
 
 ## Links
 

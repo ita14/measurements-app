@@ -1,6 +1,7 @@
 using System.Reflection;
 using Hellang.Middleware.ProblemDetails;
 using Measurements.Api.Config;
+using Measurements.Api.Converters;
 using Measurements.Api.Domain.Interfaces;
 using Measurements.Api.Extensions;
 using Measurements.Api.Infrastructure.AppSettings;
@@ -8,6 +9,9 @@ using Measurements.Api.Infrastructure.Extensions;
 using Measurements.Api.Infrastructure.Repositories;
 using Microsoft.AspNetCore.StaticFiles;
 using Serilog;
+
+// Configure Npgsql to handle DateTime values more leniently
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -17,8 +21,12 @@ Log.Logger = new LoggerConfiguration()
     .Enrich.WithMachineName()
     .CreateLogger();
 
-builder.Services.AddControllers();
-builder.Services.AddCosmosDb(builder.Configuration.GetSection("CosmosDB").Get<CosmosDbSettings>());
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    // Configure DateTime handling - assume all incoming DateTime values should be UTC
+    options.JsonSerializerOptions.Converters.Add(new UtcDateTimeConverter());
+});
+builder.Services.AddPostgreSql(builder.Configuration.GetSection("PostgreSQL").Get<PostgreSqlSettings>() ?? new PostgreSqlSettings());
 builder.Services.SetupMediatr();
 builder.Services.SetupValidation();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -37,8 +45,8 @@ try
 
     if (builder.Configuration.GetValue<bool>("SeedData"))
     {
-       app.EnsureDbCreated();
-       app.SeedTestDataIfEmptyAsync().Wait();
+       await app.EnsureDbCreatedAsync();
+       await app.SeedTestDataIfEmptyAsync();
     }
 
     app.UseHttpsRedirection();

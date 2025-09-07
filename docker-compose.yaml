@@ -39,25 +39,23 @@ services:
         ipv4_address: 172.24.0.4
 
   db:
-    container_name: cosmosdb
-    hostname: cosmosdb.local
-    image: "mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest"
-    tty: true
+    container_name: postgres-timescale
+    hostname: postgres.local
+    image: "timescale/timescaledb:latest-pg16"
     restart: always
-    mem_limit: 4G
-    cpu_count: 4
     environment:
-      - AZURE_COSMOS_EMULATOR_PARTITION_COUNT=3
-      - AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE=true
-      - AZURE_COSMOS_EMULATOR_IP_ADDRESS_OVERRIDE=172.24.0.99
+      - POSTGRES_DB=MeasurementsDB
+      - POSTGRES_USER=measurements_user
+      - POSTGRES_PASSWORD=measurements_pass
+      - PGDATA=/var/lib/postgresql/data/pgdata
     ports:
-      - "8081:8081"
-      - "10251-10254:10251-10254"
+      - "5432:5432"
     networks:
       measurements-app:
         ipv4_address: 172.24.0.99
     volumes:
-      - cosmosdb:/tmp/cosmos/appdata/
+      - postgres_data:/var/lib/postgresql/data
+      - ./src/measurements-api/database/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   keycloak:
     container_name: keycloak
@@ -93,5 +91,5 @@ networks:
           - subnet: "172.24.0.0/16"
 
 volumes:
-  cosmosdb:
+  postgres_data:
   keycloak:

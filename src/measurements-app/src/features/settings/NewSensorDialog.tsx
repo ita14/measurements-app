@@ -27,7 +27,7 @@ export function NewSensorDialog({ isOpen, onCreate, onCancel }: NewSensorDialogP
 
   const onSubmit = handleSubmit((data) => {
     const newSensor: Sensor = {
-      id: data.id,
+      id: data.identifier,
       description: data.description
     };
 
@@ -52,8 +52,8 @@ export function NewSensorDialog({ isOpen, onCreate, onCancel }: NewSensorDialogP
             margin="dense"
             label="Identifier"
             variant="standard"
-            error={!!errors.id}
-            helperText={errors.id ? 'Field is mandatory' : ''}
+            error={!!errors.identifier}
+            helperText={errors.identifier ? 'Field is mandatory' : ''}
             fullWidth
           />
           <TextField
@@ -61,8 +61,8 @@ export function NewSensorDialog({ isOpen, onCreate, onCancel }: NewSensorDialogP
             margin="dense"
             label="Description"
             variant="standard"
-            error={!!errors.id}
-            helperText={errors.id ? 'Field is mandatory' : ''}
+            error={!!errors.description}
+            helperText={errors.description ? 'Field is mandatory' : ''}
             fullWidth
           />
         </DialogContent>

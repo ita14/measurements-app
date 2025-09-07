@@ -3,29 +3,31 @@
 echo Running docker-entrypoint.sh
 
 #
-# Retrieve the self-signed SSL certificate of the CosmosDB Emulator and install it
-# # Ref: https://docs.microsoft.com/en-us/azure/cosmos-db/linux-emulator?tabs=ssl-netstd21#run-on-linux
+# Wait for PostgreSQL to be ready
 #
-echo Retrieving self-signed SSL certificate from CosmosDB Emulator
+echo Waiting for PostgreSQL to be ready...
 
 retry=1
 while [ $retry -lt 21 ]
 do
-   wget --no-check-certificate --output-document=/tmp/emulator.crt https://cosmosdb.local:8081/_explorer/emulator.pem
+   # Use pg_isready to check if PostgreSQL is accepting connections
+   pg_isready -h postgres.local -p 5432 -U measurements_user -d MeasurementsDB
    if [ "$?" -eq 0 ]
    then
-      echo "Got CosmosDB certificate!"
+      echo "PostgreSQL is ready!"
       break
    else
-      echo "******* Waiting for retry" $retry "*******"
-      sleep 10
+      echo "******* Waiting for PostgreSQL, retry" $retry "*******"
+      sleep 5
    fi
    retry=`expr $retry + 1`
 done
 
-cp /tmp/emulator.crt /usr/local/share/ca-certificates
-update-ca-certificates
+if [ $retry -eq 21 ]; then
+   echo "PostgreSQL failed to become ready after 20 retries"
+   exit 1
+fi
 
-echo Starting api..
+echo Starting api...
 
 dotnet Measurements.Api.dll "$@"

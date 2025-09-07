@@ -2,8 +2,7 @@
 
 #nullable disable
 
-public class CosmosDbSettings
+public class PostgreSqlSettings
 {
     public string ConnectionString { get; set; }
-    public string DatabaseName { get; set; }
 }
