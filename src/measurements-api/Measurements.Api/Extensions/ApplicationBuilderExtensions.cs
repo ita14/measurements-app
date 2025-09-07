@@ -63,7 +63,7 @@ public static class ApplicationBuilderExtensions
                 .RuleFor(o => o.Pressure, f => f.Random.Double(1000, 1010))
                 .RuleFor(o => o.Humidity, f => f.Random.Double(20, 60))
                 .RuleFor(o => o.Battery, f => f.Random.Double(2500, 3000))
-                .RuleFor(o => o.Acceleration, testAcceleration.Generate())
+                .RuleFor(o => o.Acceleration, f => testAcceleration.Generate())
                 .Generate(measurementCount);
 
             await measurementsRepo.AddRangeAsync(measurements);
