@@ -2,20 +2,27 @@
 using Measurements.Api.Domain.Entities;
 using Measurements.Api.Domain.Interfaces;
 using Measurements.Api.Infrastructure.Context;
+using Measurements.Api.Infrastructure.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Measurements.Api.Extensions;
 
 public static class ApplicationBuilderExtensions
 {
-    public static void EnsureDbCreated(this IApplicationBuilder builder)
+    public static async Task EnsureDbCreatedAsync(this IApplicationBuilder builder)
     {
         using IServiceScope serviceScope = builder.ApplicationServices
             .GetRequiredService<IServiceScopeFactory>()
             .CreateScope();
 
         var context = serviceScope.ServiceProvider.GetRequiredService<MeasurementsDbContext>();
+        var logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<MeasurementsDbContext>>();
 
-        context.Database.EnsureCreated();
+        // Apply any pending migrations
+        await context.Database.MigrateAsync();
+        
+        // Setup TimescaleDB hypertables and policies
+        await context.SetupTimescaleDbAsync(logger);
     }
 
     public static async Task SeedTestDataIfEmptyAsync(this IApplicationBuilder builder)
@@ -50,7 +57,7 @@ public static class ApplicationBuilderExtensions
 
             var measurements = new Faker<Measurement>()
                 .RuleFor(o => o.Id, f => f.Database.Random.Guid().ToString())
-                .RuleFor(o => o.Time, f => now.Subtract(interval * f.IndexVariable++))
+                .RuleFor(o => o.Time, f => DateTime.SpecifyKind(now.Subtract(interval * f.IndexVariable++), DateTimeKind.Utc))
                 .RuleFor(o => o.Source, sensor.Id)
                 .RuleFor(o => o.Temperature, f => f.Random.Double(15, 25))
                 .RuleFor(o => o.Pressure, f => f.Random.Double(1000, 1010))

@@ -7,11 +7,10 @@ namespace Measurements.Api.Infrastructure.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddCosmosDb(this IServiceCollection services, CosmosDbSettings settings)
+    public static IServiceCollection AddPostgreSql(this IServiceCollection services, PostgreSqlSettings settings)
     {
-        services.AddDbContext<MeasurementsDbContext>(options => options.UseCosmos(
-            settings.ConnectionString,
-            settings.DatabaseName));
+        services.AddDbContext<MeasurementsDbContext>(options => 
+            options.UseNpgsql(settings.ConnectionString));
 
         return services;
     }
