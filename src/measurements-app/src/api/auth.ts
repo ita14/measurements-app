@@ -11,7 +11,7 @@ export const apiConfig = new Configuration({
   accessToken: getAccessToken
 });
 
-async function getAccessToken(name?: string, scopes?: string[]): Promise<string> {
+async function getAccessToken(): Promise<string> {
   if (keycloak.isTokenExpired()) {
     await keycloak.updateToken(MIN_VALIDITY_SEC);
   }

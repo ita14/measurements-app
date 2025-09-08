@@ -13,19 +13,19 @@ React application for charting the measurents data.
 Install
 
 ```
-npm install
+pnpm install
 ```
 
 Start dev server
 
 ```
-npm run dev
+pnpm run dev
 ```
 
 Format
 
 ```
-npm run format
+pnpm run format
 ```
 
 Use username `user` and `foobar` password for logging in.

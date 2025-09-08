@@ -1,2 +1,15 @@
 node_modules
 dist
+.git
+.gitignore
+README.md
+Dockerfile
+.dockerignore
+npm-debug.log
+.env
+.env.local
+.env.production
+.nyc_output
+coverage
+.vscode
+.idea

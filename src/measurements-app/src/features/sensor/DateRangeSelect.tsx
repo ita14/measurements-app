@@ -3,7 +3,7 @@ import { addDays, isAfter, isBefore, subDays, subMonths, subWeeks } from 'date-f
 import { Box, ToggleButtonGroup, ToggleButton } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useMeasurementsStore } from '../../stores/measurementsStore';
 
 const enum Ranges {
@@ -55,14 +55,14 @@ function DateRangeSelect() {
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DatePicker
           label="Start date"
-          value={dateRange?.start}
+          value={dateRange?.start ? new Date(dateRange.start) : null}
           onChange={(newValue) => {
             handleDateChange(newValue, true);
           }}
         />
         <DatePicker
           label="End date"
-          value={dateRange?.end}
+          value={dateRange?.end ? new Date(dateRange.end) : null}
           onChange={(newValue) => {
             handleDateChange(newValue);
           }}

@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { useKeycloak } from '@react-keycloak/web';
 
 type PrivateRouteProps = {
-  children: JSX.Element;
+  children: React.ReactNode;
   navigateTo?: string;
 };
 
